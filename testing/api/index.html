@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script>
+        async function find() {
+            const location = document.getElementById("input").value;
+
+            const response = await axios.get(`http://localhost:5000/famous-places?location=${location}`);
+            console.log(response.data[0].geometry);
+
+            const size = response.data.length;
+            const body = document.getElementById('body');
+
+            for (let i = 0; i < size; i++) {
+                let div = document.createElement('div');
+                div.style.backgroundColor = "lightblue";
+                div.style.margin = "5px";
+
+                let div1 = document.createElement('div');
+                div1.setAttribute('id', `place${i}`);
+                div1.style.cursor = "pointer"; // Change cursor to pointer to indicate clickability
+
+                const name = response.data[i].name;
+
+                const a1 = document.createElement('h2');
+                a1.innerHTML = `${response.data[i].name}`;
+                const a2 = document.createElement('h2');
+                a2.innerHTML = `${response.data[i].rating}`;
+                const a3 = document.createElement('h2');
+                a3.innerHTML = `${response.data[i].user_ratings_total}`;
+                const a4 = document.createElement('h2');
+                a4.innerHTML = `${response.data[i].address}`;
+                const a5 = document.createElement('h2');
+                a5.innerHTML = `${response.data[i].type}`;
+
+                const a6 = document.createElement('img');
+                if (response.data[i].photo !== "No image available") {
+                    a6.setAttribute('src', `${response.data[i].photo}`);
+                    a6.style.height = "200px";
+                    a6.style.width = "200px";
+                } else {
+                    a6.setAttribute('src', "https://cdn4.iconfinder.com/data/icons/ui-beast-3/32/ui-49-4096.png");
+                    a6.style.height = "200px";
+                    a6.style.width = "200px";
+                }
+
+                const a7 = document.createElement('h2');
+                a7.innerHTML = `${response.data[i].vicinity}`;
+
+                div1.appendChild(a1);
+                div1.appendChild(a2);
+                div1.appendChild(a3);
+                div1.appendChild(a4);
+                div1.appendChild(a5);
+                div1.appendChild(a6);
+                div1.appendChild(a7);
+
+                // Set the click event to open the Google Maps link in a new tab
+                div1.addEventListener('click', function () {
+                    window.open(`https://maps.google.com/?q=${name}`, '_blank');
+                });
+
+                div.appendChild(div1);
+                body.appendChild(div);
+
+                console.log(div);
+            }
+        }
+    </script>
+</head>
+
+<body id="body">
+    <input id="input" type="text" placeholder="Enter Location">
+    <button onclick="find()">Find</button>
+</body>
+
+</html>
