@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.7.7/axios.min.js"></script>
+    <script>
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const token = urlParams.get("token");
+
+            if (token) {
+                localStorage.setItem("token", token);
+                console.log("Token stored:", token);
+                window.history.replaceState({}, document.title, "/home.html");
+            }
+
+            checkAuth();
+        };
+
+        function checkAuth() {
+            const token = localStorage.getItem("token");
+
+            if (token) {
+                document.getElementById("signup").style.display = "none";
+                document.getElementById("signin").style.display = "none";
+                document.getElementById("google").style.display = "none";
+                document.getElementById("logout").style.display = "block";
+
+                axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+            } else {
+                document.getElementById("logout").style.display = "none";
+            }
+        }
+
+        async function signup() {
+            const username = document.getElementById("signup-username").value;
+            const password = document.getElementById("signup-password").value;
+
+            await axios.post("http://localhost:3000/signup", { username, password });
+
+            alert("You are signed up");
+            document.getElementById("signup").style.display = "none";
+            document.getElementById("signin").style.display = "block";
+        }
+
+        async function signin() {
+            const username = document.getElementById("signin-username").value;
+            const password = document.getElementById("signin-password").value;
+
+            const response = await axios.post("http://localhost:3000/signin", { username, password });
+
+            localStorage.setItem("token", response.data.token);
+            alert("You are signed in");
+            window.location.href = "/home.html";
+        }
+
+        function google() {
+            window.location.href = "http://localhost:3000/auth/google";
+        }
+
+        function logout() {
+            localStorage.removeItem("token");
+            window.location.href = "/";
+        }
+    </script>
+</head>
+<body>
+    <div id="signup">
+        <h3>Signup</h3>
+        <input id="signup-username" type="text" placeholder="Username">
+        <input id="signup-password" type="password" placeholder="Password">
+        <button onclick="signup()">Submit</button>
+    </div>
+
+    <div id="google">
+        <button onclick="google()">Login With Google</button>
+    </div>
+
+    <div id="signin">
+        <h3>Signin</h3>
+        <input id="signin-username" type="text" placeholder="Username">
+        <input id="signin-password" type="password" placeholder="Password">
+        <button onclick="signin()">Submit</button>
+    </div>
+
+    <div id="logout">
+        <button onclick="logout()">Logout</button>
+    </div>
+</body>
+</html>
