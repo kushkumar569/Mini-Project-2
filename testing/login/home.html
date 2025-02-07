@@ -11,11 +11,11 @@
             const token = urlParams.get("token");
     
             if (token) {
-                // ✅ Store token in localStorage
+                //  Store token in localStorage
                 localStorage.setItem("token", token);
                 console.log("Token saved to localStorage:", token);
     
-                // ✅ Remove token from URL for security
+                //  Remove token from URL for security
                 window.history.replaceState({}, document.title, "/home.html");
             } else {
                 console.log("No token found in URL.");

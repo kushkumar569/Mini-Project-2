@@ -4,7 +4,7 @@ const cors = require("cors");
 const passport = require("passport");
 const session = require("express-session");
 const jwt = require("jsonwebtoken");
-const path = require("path");  // ✅ Import path module
+const path = require("path");  //  Import path module
 
 const JWT_SECRET = "KushKushwaha";
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
@@ -26,7 +26,7 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
-// ✅ Serve static files from the public directory
+//  Serve static files from the public directory
 app.use(express.static(path.join(__dirname)));  
 
 passport.use(
@@ -49,7 +49,7 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "index.html"));
 });
 
-// ✅ Serve home.html properly
+//  Serve home.html properly
 app.get("/home", (req, res) => {
     res.sendFile(path.join(__dirname, "home.html"));
 });
@@ -62,7 +62,7 @@ app.get("/auth/google/callback",
         const username = req.user.emails[0].value;
         const token = jwt.sign({ username }, JWT_SECRET);
 
-        // ✅ Redirect frontend with token
+        //  Redirect frontend with token
         res.redirect(`http://localhost:3000/home.html?token=${token}`);
     }
 );
