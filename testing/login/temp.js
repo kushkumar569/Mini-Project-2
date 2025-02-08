@@ -1,13 +1,19 @@
-require("dotenv").config();
-const express = require("express");
-const cors = require("cors");
-const passport = require("passport");
-const session = require("express-session");
-const jwt = require("jsonwebtoken");
-const path = require("path");  //  Import path module
+import "dotenv/config";
+import express from "express";
+import cors from "cors";
+import passport from "passport";
+import session from "express-session";
+import jwt from "jsonwebtoken";
+import path from "path";  // Import path module
+import { fileURLToPath } from "url";
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+
+
+// Convert __dirname in ES module
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const JWT_SECRET = "KushKushwaha";
-const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
 const users = [];
 const app = express();
