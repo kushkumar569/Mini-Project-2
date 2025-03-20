@@ -26,8 +26,8 @@ const StudentAccount = new Schema({
 })
 
 const TeacherAccountModel = mongoose.model(`Teacher's Account`,TeacherAccount);
-const StudentAccountModel = mongoose.model(`Teacher's Account`,StudentAccount);
-const AdminAccountModel = mongoose.model(`Teacher's Account`,AdminAccount);
+const StudentAccountModel = mongoose.model(`Student's Account`,StudentAccount);
+const AdminAccountModel = mongoose.model(`Admin's Account`,AdminAccount);
 
 module.exports = {
     Teacher: TeacherAccountModel,

@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-const Scehma = mongoose.Scehma;
+const Schema = mongoose.Schema;
 const objectId = mongoose.objectId;
 
-const Detail = new Scehma({
+const Detail = new Schema({
     semester: String,
     department: String,
     section: String,
@@ -10,7 +10,7 @@ const Detail = new Scehma({
     courseName: String,
 })
 
-const Attendence = new Scehma({
+const Attendence = new Schema({
     Date: String,
     Time: String,
     Day: String,
