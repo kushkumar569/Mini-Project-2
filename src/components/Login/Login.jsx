@@ -3,7 +3,6 @@ import { useState } from "react";
 function Login() {
     return (
         <>
-        <div>let changes</div>
             <div className="h-screen w-full bg-black flex items-center justify-center">
                 {/* Main Container */}
                 <div className="relative w-[75%] h-[75%] bg-gray-900 rounded-2xl shadow-lg flex">
