@@ -1,49 +1,89 @@
 import "tailwindcss";
 import { useState } from "react";
+
 function Login() {
+    const [user, setUser] = useState("Student");
+
     return (
         <>
-            <div className="h-screen w-full bg-black flex items-center justify-center">
-                {/* Main Container */}
-                <div className="relative w-[75%] h-[75%] bg-gray-900 rounded-2xl shadow-lg flex">
+            {/* Header */}
+            <div className="bg-white flex">
+                <img
+                    src="https://smvdu.ac.in/wp-content/uploads/2023/08/cropped-logo-600-1.png"
+                    alt="Login Illustration"
+                    className="w-20 h-20 object-cover rounded-r-2xl ml-4 mt-2"
+                />
+                <div className="flex flex-col justify-center items-start mt-3 ml-4">
+                    <div className="text-black text-4xl font-bold">
+                        Shri Mata Vaishno Devi University
+                    </div>
+                </div>
+            </div>
 
-                    {/* Logo and Title - Aligned at Top Left */}
-                    <div className="absolute top-1 left-2 flex items-center space-x-3">
+            {/* Login Container */}
+            <div className="bg-white flex items-center justify-center mt-10">
+                <div className="relative w-[75%] h-[75%] bg-gray-200 rounded-2xl shadow-lg flex">
+
+                    {/* Logo and Title */}
+                    <div className="absolute top-1 left-2 flex items-center space-x-1">
                         <img src="/logo.png" alt="Logo" className="w-14 h-14" />
-                        <span className="text-gray-400 text-lg font-semibold">
+                        <span className="text-gray-500 text-lg font-semibold">
                             Geo-Fencing Attendance Manager
                         </span>
                     </div>
 
                     {/* Left Side - Login Section */}
-                    <div className="w-1/2 flex flex-col justify-center items-start px-12 text-white">
-                        <h2 className="text-3xl font-semibold mb-6">Welcome Back</h2>
-                        <p className="text-gray-400 mb-6">Please log in to continue</p>
+                    <div className="w-1/2 flex flex-col justify-center items-start px-12 text-black">
+                        <h2 className="text-3xl font-bold mb-6">Welcome Back</h2>
+                        <p className="text-gray-500 font-semibold mb-6">Please log in to continue</p>
 
                         <input
                             type="email"
                             placeholder="Email"
-                            className="w-full px-4 py-2 mb-4 bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 mb-4 bg-gray-300 font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
                         <input
                             type="password"
                             placeholder="Password"
-                            className="w-full px-4 py-2 mb-4 bg-gray-800 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 mb-4 bg-gray-300 font-semibold rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         />
 
-                        <button className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md">
+                        <button className="w-full bg-green-600 hover:bg-orange-400 text-white py-2 rounded-md font-semibold">
                             Login
                         </button>
 
-                        <p className="text-sm text-gray-400 mt-4">
-                            Don't have an account? <a href="#" className="text-blue-500">Sign Up</a>
-                        </p>
+                        {/* Centered "Login as" Text */}
+                        <div className="w-full flex justify-center mt-4">
+                            <span className="text-gray-500 font-semibold">Login as</span>
+                        </div>
+
+                        {/* Left Aligned Buttons with Dynamic Background Colors */}
+                        <div className="flex w-full justify-start space-x-9.5 mt-4">
+                            <button
+                                className={`px-10 py-2 rounded-md font-semibold text-white ${user === "Student" ? "bg-orange-400" : "bg-green-600 hover:bg-orange-400"}`}
+                                onClick={() => setUser("Student")}
+                            >
+                                Student
+                            </button>
+                            <button
+                                className={`px-10 py-2 rounded-md font-semibold text-white ${user === "Teacher" ? "bg-orange-400" : "bg-green-600 hover:bg-orange-400"}`}
+                                onClick={() => setUser("Teacher")}
+                            >
+                                Teacher
+                            </button>
+                            <button
+                                className={`px-10 py-2 rounded-md font-semibold text-white ${user === "Admin" ? "bg-orange-400" : "bg-green-600 hover:bg-orange-400"}`}
+                                onClick={() => setUser("Admin")}
+                            >
+                                Admin
+                            </button>
+                        </div>
                     </div>
 
                     {/* Right Side - Image */}
                     <div className="w-1/2">
                         <img
-                            src="https://static.vecteezy.com/system/resources/previews/000/311/573/original/world-globe-on-a-blue-background-vector-illustration.jpg"
+                            src="/logo.png"
                             alt="Login Illustration"
                             className="w-full h-full object-cover rounded-r-2xl"
                         />
@@ -55,4 +95,4 @@ function Login() {
     );
 };
 
-export default Login
+export default Login;
