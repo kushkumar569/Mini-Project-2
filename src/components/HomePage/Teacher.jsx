@@ -1,21 +1,38 @@
 import { useState, useEffect } from "react";
-import { useSetRecoilState } from "recoil";
+import { useSetRecoilState, useRecoilValue, RecoilRoot } from "recoil";
 import { TeacherLatitude, TeacherLongitude } from "../atoms/location";
+import {live,Attend} from '../atoms/attendence'
+import Header from "../Header";
 
 function Teacher() {
+    return (
+        <>
+            <Header/>
+            <RecoilRoot>
+                <Main />
+            </RecoilRoot>
+        </>
+    );
+}
+
+function Main() {
     const [time, setTime] = useState(5 * 60);
     const [isRunning, setIsRunning] = useState(false);
     const [message, setMessage] = useState("process");
     const [isMark, setIsMark] = useState(false);
     const [entryNumber, setEntryNumber] = useState("");
-    const [numbers, setNumbers] = useState([]);
+    const attend = useRecoilValue(Attend);
+    const [numbers, setNumbers] = useState(attend);
     const [msg, setMsg] = useState("");
 
-    let lat = null;
-    let lon = null;
-
+    const lat = useRecoilValue(TeacherLatitude);
+    const lon = useRecoilValue(TeacherLongitude);
     const setLat = useSetRecoilState(TeacherLatitude);
     const setLon = useSetRecoilState(TeacherLongitude);
+
+    const setliveAttendence = useSetRecoilState(live);
+    const setAttendence = useSetRecoilState(Attend);
+    const live2 = useRecoilValue(live);
 
     useEffect(() => {
         let timer;
@@ -24,6 +41,9 @@ function Teacher() {
                 setTime(prevTime => prevTime - 1);
             }, 1000);
         } else if (time === 0) {
+            setliveAttendence(false);
+            setLat(0.0);
+            setLon(0.0);
             setIsRunning(false);
         }
         return () => clearInterval(timer);
@@ -36,9 +56,6 @@ function Teacher() {
                     (position) => {
                         setLat(position.coords.latitude);
                         setLon(position.coords.longitude);
-                        lat = position.coords.latitude;
-                        lon = position.coords.longitude;
-                        // setMessage("Attendance Marked Successfully");
                         setIsMark(true);
                         resolve(true);
                     },
@@ -82,6 +99,7 @@ function Teacher() {
                 if (marked) {
                     if (!isRunning) {
                         console.log(`${lat}  ${lon}`);
+                        setliveAttendence(true);
                         setIsRunning(true);
                     }
                 } else {
@@ -104,34 +122,27 @@ function Teacher() {
 
     const handleAddNumber = () => {
         const num = Number(entryNumber.trim());
-
+    
         if (!entryNumber.trim()) {
             setMsg("Input cannot be empty.");
         } else if (isNaN(num)) {
             setMsg("Please enter a valid number.");
         } else if (num < 1 || num > 50) {
             setMsg("Number must be between 1 and 50.");
+        } else if (numbers.includes(num)) {
+            setMsg("Number already exists.");
         } else {
-            setNumbers([...numbers, num]); // Add to array
+            const updatedNumbers = [...numbers, num].sort((a, b) => a - b);
+            setNumbers(updatedNumbers);
+            setAttendence(updatedNumbers);
             setMsg("Number added successfully.");
             setEntryNumber(""); // Clear input field
         }
     };
-
+    
     return (
         <>
-            <div className="bg-white flex mb-30">
-                <img
-                    src="https://smvdu.ac.in/wp-content/uploads/2023/08/cropped-logo-600-1.png"
-                    alt="Login Illustration"
-                    className="w-20 h-20 object-cover rounded-r-2xl ml-4 mt-2"
-                />
-                <div className="flex flex-col justify-center items-start mt-3 ml-4">
-                    <div className="text-black text-4xl font-bold">
-                        Shri Mata Vaishno Devi University
-                    </div>
-                </div>
-            </div>
+            <div>{lat} {lon}</div>
             <div className="bg-white flex items-center justify-center p-6">
                 <div className="relative w-full max-w-lg bg-gray-200 rounded-2xl shadow-lg flex flex-col p-6 items-center">
                     <div className="absolute top-1 left-2 flex items-center space-x-1">
@@ -156,7 +167,7 @@ function Teacher() {
                             placeholder="Entry Number"
                         />
                         <button
-                            onClick={handleAddNumber}
+                            onClick={live2==true ? handleAddNumber : () => {alert("Mark Attendence First")}}
                             className="bg-green-600 hover:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold w-full"
                         >
                             Add
@@ -169,7 +180,7 @@ function Teacher() {
                 </div>
             </div>
         </>
-    );
+    )
 }
 
 export default Teacher;

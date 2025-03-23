@@ -7,7 +7,7 @@ import SetRoutes from './components/SetRoutes'
 import Teacher from '../src/components/HomePage/Teacher'
 import Student from '../src/components/HomePage/Student'
 import { RecoilRoot } from "recoil";
-
+import Test from '../src/components/test/Test'
 function App() {
   const [count, setCount] = useState(0)
 
@@ -18,8 +18,9 @@ function App() {
       </SetRoutes> */}
       <RecoilRoot>
         <Teacher />
-      </RecoilRoot>
+        {/* <Test/> */}
       {/* <Student/> */}
+      </RecoilRoot>
     </>
   )
 }
