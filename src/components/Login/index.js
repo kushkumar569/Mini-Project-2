@@ -1,5 +1,7 @@
 require("dotenv").config();
 const express = require("express");
+const {Router} = require("express");
+const Login = Router();
 const mongoose = require("mongoose");
 const { Teacher, Student, Admin } = require("../../../DataBase/Account");
 const jwt = require("jsonwebtoken");
@@ -14,7 +16,7 @@ const JWT_SECRET = process.env.JWT_SECRET || "your_secret_key";
 const PORT = process.env.PORT || 3000;
 
 // **🔹 Login Route**
-app.post("/login", async (req, res) => {
+Login.post("/login", async (req, res) => {
     const { email, password } = req.body;
 
     // **1️⃣ Check User in Different Models**
@@ -30,20 +32,24 @@ app.post("/login", async (req, res) => {
         }
     }
 
+    // console.log(user);
+    
     // **2️⃣ If User Not Found**
     if (!user) {
         return res.status(401).json({ message: "Wrong email or password" });
     }
 
     // **3️⃣ Validate Password (Using bcrypt)**
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = (password ===user.password) ? true : false;
     if (!isPasswordValid) {
-        return res.status(401).json({ message: "Wrong email or password" });
+        return res.status(401).json({ message: "Wrong email or password...." });
     }
 
     // **4️⃣ Generate JWT Token**
     const token = jwt.sign({ email, role: userType }, JWT_SECRET, { expiresIn: "7d" });
 
+    console.log(token);
+    
     // **5️⃣ Store Token in HTTP-only Cookie**
     res.cookie("token", token, {
         httpOnly: true,
@@ -74,7 +80,7 @@ const authenticateUser = (req, res, next) => {
 };
 
 // **🔹 Auto-Login Route**
-app.get("/me", authenticateUser, (req, res) => {
+Login.get("/me", authenticateUser, (req, res) => {
     res.json({
         message: `Welcome back, ${req.user.role}!`,
         user: req.user,
@@ -82,12 +88,11 @@ app.get("/me", authenticateUser, (req, res) => {
 });
 
 // **🔹 Logout Route**
-app.post("/logout", (req, res) => {
+Login.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out successfully!" });
 });
 
-// **🔹 Start Server**
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-});
+module.exports = {
+    Login: Login
+}

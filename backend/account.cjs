@@ -6,6 +6,7 @@ const { Teacher, Student, Admin } = require("../DataBase/Account");
 const { detail, Attendence } = require("../DataBase/Attendence");
 const { subject } = require("../DataBase/subject");
 const { Info, course, schedule } = require("../DataBase/TImeTable");
+const {Login} = require("../src/components/Login/index")
 
 const app = express();
 app.use(express.json());
@@ -15,6 +16,8 @@ app.use(cors({
     origin: "http://localhost:5173", // Allow frontend to access backend
     credentials: true // Allow cookies to be sent
 }));
+
+app.use("/",Login);
 
 async function main() {
     try {

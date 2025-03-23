@@ -97,6 +97,13 @@ function Login() {
                             Login
                         </button>
                     </div>
+                    <div className="w-1/2">
+                        <img
+                            src="/logo.png"
+                            alt="Login Illustration"
+                            className="w-full h-full object-cover rounded-r-2xl"
+                        />
+                    </div>
                 </div>
             </div>
         </>
