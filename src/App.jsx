@@ -18,9 +18,9 @@ function App() {
       </SetRoutes> */}
       <RecoilRoot>
         <Teacher />
-        {/* <Test/> */}
       {/* <Student/> */}
-      </RecoilRoot>
+      </RecoilRoot >
+      {/* <Test/> */}
     </>
   )
 }

@@ -2,12 +2,12 @@ import { atom } from "recoil";
 
 export const TeacherLatitude = atom({
   key: "TeacherLatitude",
-  default: 32.943144657701716
+  default: 32.940918
 });
 
 export const TeacherLongitude = atom({ 
   key: "TeacherLongitude",
-  default: 74.95526578190709
+  default: 74.954437
 });
 
 export const StudentLatitude = atom({

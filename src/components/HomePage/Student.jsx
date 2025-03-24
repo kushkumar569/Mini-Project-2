@@ -152,6 +152,7 @@ function Btn() {
     function mark() {
         const updatedNumbers = Array.from(new Set([...attend, 15])).sort((a, b) => a - b);
         setAttendence(updatedNumbers);
+        alert("Marked Attendednce")
         console.log("Updated Attendance:", updatedNumbers);
     }
 

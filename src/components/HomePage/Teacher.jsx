@@ -142,7 +142,7 @@ function Main() {
     
     return (
         <>
-            <div>{lat} {lon}</div>
+            {/* <div>{lat} {lon}</div> */}
             <div className="bg-white flex items-center justify-center p-6">
                 <div className="relative w-full max-w-lg bg-gray-200 rounded-2xl shadow-lg flex flex-col p-6 items-center">
                     <div className="absolute top-1 left-2 flex items-center space-x-1">
