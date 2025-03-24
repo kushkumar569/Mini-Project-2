@@ -2,11 +2,12 @@ require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
 const mongoose = require("mongoose");
-const { Teacher, Student, Admin } = require("../DataBase/Account");
-const { detail, Attendence } = require("../DataBase/Attendence");
-const { subject } = require("../DataBase/subject");
-const { Info, course, schedule } = require("../DataBase/TImeTable");
-const {Login} = require("../src/components/Login/index")
+const { Teacher, Student, Admin } = require("../DataBase/Account.cjs");
+const { detail, Attendence } = require("../DataBase/Attendence.cjs");
+const { subject } = require("../DataBase/subject.cjs");
+const { Info, course, schedule } = require("../DataBase/TImeTable.cjs");
+const {Login} = require("../src/components/Login/index.cjs");
+const {Class} = require("./class.cjs")
 
 const app = express();
 app.use(express.json());
@@ -17,7 +18,10 @@ app.use(cors({
     credentials: true // Allow cookies to be sent
 }));
 
+console.log("account.js");
+
 app.use("/",Login);
+app.use("/class",Class);
 
 async function main() {
     try {

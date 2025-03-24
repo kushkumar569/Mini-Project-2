@@ -1,16 +1,83 @@
 import { useState, useEffect } from "react";
 import { useSetRecoilState, useRecoilValue, RecoilRoot } from "recoil";
 import { TeacherLatitude, TeacherLongitude } from "../atoms/location";
-import {live,Attend} from '../atoms/attendence'
+import { account, courseCode, courseName, semester, department, section, date, day, time } from "../atoms/detail.js";
+import { live, Attend } from '../atoms/attendence'
 import Header from "../Header";
 
 function Teacher() {
+    const [isClass, setIsClass] = useState(false);
+    const [msg, setMsg] = useState("");
+    const email = useRecoilValue(account)
+    const setCC = useSetRecoilState(courseCode);
+    const setCN = useSetRecoilState(courseName);
+    const setSem = useSetRecoilState(semester);
+    const setDep = useSetRecoilState(department);
+    const setSec = useSetRecoilState(section);
+    const setDate = useSetRecoilState(date);
+    const setDay = useSetRecoilState(day);
+    const setTime = useSetRecoilState(time);
+
+    const cc = useRecoilValue(courseCode);
+    const cn = useRecoilValue(courseName);
+
+
+    useEffect(() => {
+        console.log("Recoil Course Code:", cc);
+        console.log("Recoil Course Name:", cn);
+    }, [cc, cn]); // Runs whenever cc or cn changes
+
+    useEffect(() => {
+        const fetchSchedule = async () => {
+            try {
+                const response = await fetch("http://localhost:3000/class/data", {
+                    method: "POST", // Since req.body is used in the backend
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ email }) // Send email in request body
+                });
+
+                if (!response.ok) {
+                    throw new Error("Failed to fetch schedule");
+                    setIsClass(false);
+                    setMsg("There are no class At that time")
+                }
+                const data = await response.json();
+                const use = data.matchedClasses[0];
+                await set();
+                function set() {
+                    setIsClass(true);
+                    setMsg("Class");
+                    console.log(use);
+
+                    setCC(use.courseCode);
+                    setCN(use.courseName);
+                    setSem(use.semester);
+                    setDep(use.department);
+                    setSec(use.section);
+                    setDate(use.date);
+                    setDay(use.day);
+                    setTime(use.time);
+                }
+
+
+                // setSchedule(data); // Store schedule in state
+            } catch (error) {
+                console.error("Error fetching schedule:", error);
+                setMsg("Error fetching schedule:", error);
+                setIsClass(false);
+            }
+        };
+
+        fetchSchedule();
+    }, [email]); // Fetch data whenever email changes
     return (
         <>
-            <Header/>
-            <RecoilRoot>
+            <Header />
+            {isClass ? (<RecoilRoot>
                 <Main />
-            </RecoilRoot>
+            </RecoilRoot>) : <NoClass msg={msg} />}
         </>
     );
 }
@@ -33,6 +100,9 @@ function Main() {
     const setliveAttendence = useSetRecoilState(live);
     const setAttendence = useSetRecoilState(Attend);
     const live2 = useRecoilValue(live);
+
+    const cc = useRecoilValue(courseCode);
+    const cn = useRecoilValue(courseName)
 
     useEffect(() => {
         let timer;
@@ -122,7 +192,7 @@ function Main() {
 
     const handleAddNumber = () => {
         const num = Number(entryNumber.trim());
-    
+
         if (!entryNumber.trim()) {
             setMsg("Input cannot be empty.");
         } else if (isNaN(num)) {
@@ -139,10 +209,11 @@ function Main() {
             setEntryNumber(""); // Clear input field
         }
     };
-    
+
     return (
         <>
             {/* <div>{lat} {lon}</div> */}
+            <div>{cc} and {cn}</div>
             <div className="bg-white flex items-center justify-center p-6">
                 <div className="relative w-full max-w-lg bg-gray-200 rounded-2xl shadow-lg flex flex-col p-6 items-center">
                     <div className="absolute top-1 left-2 flex items-center space-x-1">
@@ -167,7 +238,7 @@ function Main() {
                             placeholder="Entry Number"
                         />
                         <button
-                            onClick={live2==true ? handleAddNumber : () => {alert("Mark Attendence First")}}
+                            onClick={live2 == true ? handleAddNumber : () => { alert("Mark Attendence First") }}
                             className="bg-green-600 hover:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold w-full"
                         >
                             Add
@@ -179,6 +250,14 @@ function Main() {
                     </div>
                 </div>
             </div>
+        </>
+    )
+}
+
+function NoClass({ msg }) {
+    return (
+        <>
+            {msg}
         </>
     )
 }
