@@ -36,7 +36,7 @@ function PrivateAuthStudent({ allowedRoles }) {
     if (!isAuthenticated || allowedRoles !== userRole) {
         console.log(allowedRoles,userRole);
         
-        return <Navigate to="/view" />;
+        return <Navigate to="/unauthorized" />;
     }
 
     return <><Outlet /></> ;
