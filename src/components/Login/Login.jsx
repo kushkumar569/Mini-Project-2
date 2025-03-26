@@ -9,7 +9,7 @@ function Login() {
 
     // Auto-Login Check
     useEffect(() => {
-        fetch(`${process.env.BACKEND_URL}/login`, {
+        fetch(`${process.env.BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
         })
