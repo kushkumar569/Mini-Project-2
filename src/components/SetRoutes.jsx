@@ -21,11 +21,14 @@ function SetRoutes() {
                     <Route element={<PrivateRoute allowedRoles={"Student"} />}>
                         <Route path="/Student" element={<Student />} />
                     </Route>
-                    <Route element={<PrivateRoute allowedRoles={"Admin"} />}>
-                    </Route>
+
+
+                    {/* <Route element={<PrivateRoute allowedRoles={"Admin"} />}>
+                    </Route> */}
+
                         <Route path="/Admin" element={<Admin />} />
-                    <Route element={<PrivateRoute allowedRoles={"Teacher"} />}>
-                    </Route>
+                    {/* <Route element={<PrivateRoute allowedRoles={"Teacher"} />}>
+                    </Route> */}
                         <Route path="/Teacher" element={<Teacher />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
