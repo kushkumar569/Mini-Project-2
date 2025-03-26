@@ -1,4 +1,4 @@
-import { Navigate, Outlet,useNavigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 function PrivateRoute({ allowedRoles }) {
@@ -6,12 +6,10 @@ function PrivateRoute({ allowedRoles }) {
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const navigate = useNavigate();
-
     useEffect(() => {
-        fetch(`${process.env.BACKEND_URL}/me`, {
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/me`, {
             method: "GET",
-            credentials: "include", // Ensure cookies are sent
+            credentials: "include",
         })
             .then((res) => res.json())
             .then((data) => {
@@ -29,13 +27,11 @@ function PrivateRoute({ allowedRoles }) {
     if (loading) return <div>Loading...</div>;
 
     // Redirect if not authenticated or role mismatch
-    if (!isAuthenticated || allowedRoles != userRole) {
-        console.log(allowedRoles);
-        navigate("/unauthorized");
-        // return <Navigate to="/unauthorized" />;
+    if (!isAuthenticated || allowedRoles !== userRole) {
+        return <Navigate to="/unauthorized" />;
     }
 
-    return <><Outlet /></>;
+    return <Outlet />;
 }
 
 export default PrivateRoute;

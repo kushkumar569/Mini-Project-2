@@ -1,40 +1,39 @@
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./Login/Login";
 import Student from "./HomePage/Student";
 import Admin from "./HomePage/Admin";
 import Teacher from "./HomePage/Teacher";
 import View from "./HomePage/View";
 import PrivateRoute from "./PrivateRoute";
-import { Navigate } from "react-router-dom";
 import UnAuthorized from "./HomePage/UnAuthorized";
 import Logout from "./Login/Logout";
 
 function SetRoutes() {
     return (
-        <div>
-            <BrowserRouter>
-                <Routes>
-                    <Route path="/unauthorized" element={<UnAuthorized/>}/>
-                    <Route path="/view" element={<View />} />
-                    <Route path="/" element={<Login />} />
-                    <Route path="logout" element={<Logout/>}/>
-                    <Route element={<PrivateRoute allowedRoles={"Student"} />}>
-                        <Route path="/Student" element={<Student />} />
-                    </Route>
+        <BrowserRouter>
+            <Routes>
+                <Route path="/unauthorized" element={<UnAuthorized />} />
+                <Route path="/view" element={<View />} />
+                <Route path="/" element={<Login />} />
+                <Route path="/logout" element={<Logout />} />
 
+                {/* Private Routes for different roles */}
+                <Route element={<PrivateRoute allowedRoles="Student" />}>
+                    <Route path="/Student" element={<Student />} />
+                </Route>
 
-                    {/* <Route element={<PrivateRoute allowedRoles={"Admin"} />}>
-                    </Route> */}
+                <Route element={<PrivateRoute allowedRoles="Admin" />}>
+                    <Route path="/Admin" element={<Admin />} />
+                </Route>
 
-                        <Route path="/Admin" element={<Admin />} />
-                    {/* <Route element={<PrivateRoute allowedRoles={"Teacher"} />}>
-                    </Route> */}
-                        <Route path="/Teacher" element={<Teacher />} />
-                    <Route path="*" element={<Navigate to="/" />} />
-                </Routes>
-            </BrowserRouter>
-        </div >
-    )
+                <Route element={<PrivateRoute allowedRoles="Teacher" />}>
+                    <Route path="/Teacher" element={<Teacher />} />
+                </Route>
+
+                <Route path="*" element={<Navigate to="/" />} />
+            </Routes>
+        </BrowserRouter>
+    );
 }
 
 export default SetRoutes;
