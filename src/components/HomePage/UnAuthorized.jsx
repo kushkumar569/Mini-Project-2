@@ -13,6 +13,7 @@ function UnAuthorized(){
             const data = await response.json();
 
             if (response.ok) {
+                localStorage.removeItem("token")
                 // showToast(data.message || "Logged out successfully!");
                 navigate("/"); // Redirect to login page
             } else {
