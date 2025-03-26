@@ -35,7 +35,7 @@ function PrivateRoute({ allowedRoles }) {
         // return <Navigate to="/unauthorized" />;
     }
 
-    return <Outlet />;
+    return <><Outlet /></>;
 }
 
 export default PrivateRoute;
