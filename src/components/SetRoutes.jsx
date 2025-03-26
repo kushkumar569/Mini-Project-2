@@ -22,11 +22,11 @@ function SetRoutes() {
                         <Route path="/Student" element={<Student />} />
                     </Route>
                     <Route element={<PrivateRoute allowedRoles={"Admin"} />}>
+                    </Route>
                         <Route path="/Admin" element={<Admin />} />
-                    </Route>
                     <Route element={<PrivateRoute allowedRoles={"Teacher"} />}>
-                        <Route path="/Teacher" element={<Teacher />} />
                     </Route>
+                        <Route path="/Teacher" element={<Teacher />} />
                     <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </BrowserRouter>
