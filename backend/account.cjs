@@ -14,8 +14,7 @@ app.use(express.json());
 
 // Enable CORS with specific origin
 app.use(cors({
-    origin: `${process.env.FRONTEND_URL}`, // Allow frontend to access backend
-    credentials: true // Allow cookies to be sent
+        credentials: true // Allow cookies to be sent
 }));
 
 
