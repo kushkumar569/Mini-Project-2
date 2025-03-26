@@ -15,7 +15,7 @@ function Teacher() {
 
     // Auto-Login Check
     useEffect(() => {
-        fetch("http://localhost:3000/me", {
+        fetch(`${process.env.BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
         })
@@ -52,7 +52,7 @@ function Teacher() {
     useEffect(() => {
         const fetchSchedule = async () => {
             try {
-                const response = await fetch("http://localhost:3000/class/data", {
+                const response = await fetch(`${process.env.BACKEND_URL}/class/data`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -145,7 +145,7 @@ function NoClass({ msg,setShowMain,setSelectedCourse }) {
 
     async function FindClass() {
         try {
-            const response = await fetch("http://localhost:3000/class/extra", {
+            const response = await fetch(`${process.env.BACKEND_URL}/class/extra`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

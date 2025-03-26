@@ -9,7 +9,7 @@ function Login() {
 
     // Auto-Login Check
     useEffect(() => {
-        fetch("http://localhost:3000/me", {
+        fetch(`${process.env.BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
         })
@@ -24,7 +24,7 @@ function Login() {
 
     async function loginReq() {
         try {
-            const response = await fetch("http://localhost:3000/login", {
+            const response = await fetch(`${process.env.BACKEND_URL}/login`, {
                 method: "POST",
                 credentials: "include", // Ensures cookies are stored
                 headers: { "Content-Type": "application/json" },

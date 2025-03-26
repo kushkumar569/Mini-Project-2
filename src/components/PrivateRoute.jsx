@@ -7,7 +7,7 @@ function PrivateRoute({ allowedRoles }) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        fetch("http://localhost:3000/me", {
+        fetch(`${process.env.BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensure cookies are sent
         })

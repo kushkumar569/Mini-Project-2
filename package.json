@@ -4,7 +4,8 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon ./backend/account.cjs",
+    "start-prod": "node ./backend/account.cjs",
+    "start-dev":"nodemon ./backend/account.cjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
