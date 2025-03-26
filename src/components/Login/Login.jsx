@@ -11,8 +11,9 @@ function Login() {
     useEffect(() => {
         const token = localStorage.getItem("token");
         
-
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/me`, {
+        console.log(process.env.BACKEND_URL,"afdgd");
+        
+        fetch(`${process.env.BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
             headers: {

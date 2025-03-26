@@ -9,7 +9,7 @@ function PrivateAuthTeacher({ allowedRoles }) {
     const token = localStorage.getItem("token");
 
     useEffect(() => {
-        fetch(`${import.meta.env.VITE_BACKEND_URL}/me`, {
+        fetch(`${process.env.BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
             headers: {

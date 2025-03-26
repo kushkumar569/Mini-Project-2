@@ -13,21 +13,6 @@ function Teacher() {
 
     const navigate = useNavigate();
 
-    // Auto-Login Check
-    useEffect(() => {
-        fetch(`${process.env.BACKEND_URL}/me`, {
-            method: "GET",
-            credentials: "include", // Ensures cookies are sent
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.user) {
-                    navigate(`/${data.user.role.toLowerCase()}`);
-                }
-            })
-            .catch((error) => console.error("Auto-login failed:", error));
-    }, [navigate]);
-
     const [isRunning, setIsRunning] = useState(false);
     const [isClass, setIsClass] = useState(false);
     const [msg, setMsg] = useState("");
