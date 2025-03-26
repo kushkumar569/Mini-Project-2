@@ -1,11 +1,16 @@
-const { defineConfig } = require('vite');
+const { defineConfig, loadEnv } = require('vite');
 const react = require('@vitejs/plugin-react');
 const { VitePWA } = require('vite-plugin-pwa');
 
-async function getConfig() {
+async function getConfig(mode) {
   const tailwindcss = (await import('@tailwindcss/vite')).default;
 
+  const env = loadEnv(mode, process.cwd(), '');
+
   return defineConfig({
+    define:{
+      'process.env.BACKEND_URL':JSON.stringify(env.BACKEND_URL),
+    },
     plugins: [
       react(),
       tailwindcss(),

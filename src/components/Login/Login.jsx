@@ -19,6 +19,7 @@ function Login() {
                     navigate(`/${data.user.role.toLowerCase()}`);
                 }
             })
+            .then(console.log(process.env.BACKEND_URL))
             .catch((error) => console.error("Auto-login failed:", error));
     }, [navigate]);
 
