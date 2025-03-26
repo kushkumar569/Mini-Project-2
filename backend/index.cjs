@@ -60,18 +60,16 @@ Login.post("/login", async (req, res) => {
 });
 
 
-// **🔹 Persistent Login (Auto-Login)**
 const authenticateUser = (req, res, next) => {
-    console.log("Raw Cookies:", req.headers.cookie); // ✅ Log raw cookies for debugging
+    console.log("Headers:", req.headers); // ✅ Log headers for debugging
 
-    // ✅ Manually extract token from raw cookie string
-    const rawCookies = req.headers.cookie;
-    const token = rawCookies?.split("; ").find((c) => c.startsWith("token="))?.split("=")[1];
-
-    
-    if (!token) {
+    // ✅ Extract token from Authorization header
+    const authHeader = req.headers.authorization;
+    if (!authHeader || !authHeader.startsWith("Bearer ")) {
         return res.status(401).json({ message: "Unauthorized, please login" });
     }
+
+    const token = authHeader.split(" ")[1]; // Extract token after "Bearer"
 
     jwt.verify(token, JWT_SECRET, (err, decoded) => {
         if (err) {
@@ -85,8 +83,8 @@ const authenticateUser = (req, res, next) => {
 
 // **🔹 Auto-Login Route**
 Login.get("/me", authenticateUser, (req, res) => {
-    console.log("hyyyyy");
-    
+    console.log("Authenticated request received.");
+
     res.json({
         message: `Welcome back, ${req.user.role}!`,
         user: req.user,
