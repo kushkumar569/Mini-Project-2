@@ -7,6 +7,9 @@ import View from "./HomePage/View";
 import PrivateRoute from "./PrivateRoute";
 import UnAuthorized from "./HomePage/UnAuthorized";
 import Logout from "./Login/Logout";
+import PrivateAuthStudent from "./Auth/PrivateAuthStudent";
+import PrivateAuthAdmin from "./Auth/PrivateAuthAdmin";
+import PrivateAuthTeacher from "./Auth/PrivateAuthTeacher";
 
 function SetRoutes() {
     return (
@@ -18,15 +21,15 @@ function SetRoutes() {
                 <Route path="/logout" element={<Logout />} />
 
                 {/* Private Routes for different roles */}
-                <Route element={<PrivateRoute allowedRoles="Student" />}>
+                <Route element={<PrivateAuthStudent allowedRoles="Student" />}>
                     <Route path="/Student" element={<Student />} />
                 </Route>
 
-                <Route element={<PrivateRoute allowedRoles="Admin" />}>
+                <Route element={<PrivateAuthAdmin allowedRoles="Admin" />}>
                     <Route path="/Admin" element={<Admin />} />
                 </Route>
 
-                <Route element={<PrivateRoute allowedRoles="Teacher" />}>
+                <Route element={<PrivateAuthTeacher allowedRoles="Teacher" />}>
                     <Route path="/Teacher" element={<Teacher />} />
                 </Route>
 
