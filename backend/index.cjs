@@ -51,15 +51,13 @@ Login.post("/login", async (req, res) => {
     console.log(token);
     
     // **5️⃣ Store Token in HTTP-only Cookie**
-    res.cookie("token", token, {
+    return res.status(200).cookie("token", token, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production", // Secure in production
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
-    });
-
-    // **6️⃣ Send Response with User Type**
-    res.json({ success: true, role: userType });
+    }).json({ success: true, role: userType });
 });
+
 
 // **🔹 Persistent Login (Auto-Login)**
 const authenticateUser = (req, res, next) => {
