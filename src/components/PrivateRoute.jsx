@@ -27,10 +27,10 @@ function PrivateRoute({ allowedRoles }) {
     if (loading) return <div>Loading...</div>;
 
     // Redirect if not authenticated or role mismatch
-    if (!isAuthenticated || allowedRoles != userRole) {
-        console.log(allowedRoles);
-        return <Navigate to="/unauthorized" />;
-    }
+    // if (!isAuthenticated || allowedRoles != userRole) {
+    //     console.log(allowedRoles);
+    //     return <Navigate to="/unauthorized" />;
+    // }
 
     return <Outlet />;
 }
