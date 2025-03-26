@@ -31,7 +31,7 @@ function Login() {
             .catch((error) => console.error("Auto-login failed:", error));
 
         // console.log(import.meta.env.VITE_BACKEND_URL); // Moved outside to avoid execution issues
-    }, [navigate]);
+    }, []);
 
     async function loginReq() {
         try {
@@ -87,7 +87,7 @@ function Login() {
                     </div>
 
                     <div className="w-1/2 flex flex-col justify-center items-start px-12 text-black">
-                        <h2 className="text-3xl font-bold mb-6">Welcome Back ok</h2>
+                        <h2 className="text-3xl font-bold mb-6">Welcome Back 1</h2>
                         <p className="text-gray-500 font-semibold mb-6">Please log in to continue</p>
 
                         <input
