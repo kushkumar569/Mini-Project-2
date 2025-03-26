@@ -18,7 +18,6 @@ app.use(cors({
     credentials: true // Allow cookies to be sent
 }));
 
-console.log("account.js");
 
 app.use("/",Login);
 app.use("/class",Class);

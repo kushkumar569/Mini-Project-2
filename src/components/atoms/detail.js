@@ -28,7 +28,7 @@ export const department = atom({
 
 export const section = atom({
     key: "Section",
-    default: "",
+    default: "A",
 })
 
 export const day = atom({

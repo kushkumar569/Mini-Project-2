@@ -1,21 +1,36 @@
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import Login from "./Login/Login";
-import  Student  from "./HomePage/Student";
+import Student from "./HomePage/Student";
 import Admin from "./HomePage/Admin";
-import Teacher  from "./HomePage/Teacher";
+import Teacher from "./HomePage/Teacher";
+import View from "./HomePage/View";
+import PrivateRoute from "./PrivateRoute";
+import { Navigate } from "react-router-dom";
+import UnAuthorized from "./HomePage/UnAuthorized";
+import Logout from "./Login/Logout";
 
 function SetRoutes() {
     return (
         <div>
             <BrowserRouter>
                 <Routes>
+                    <Route path="/unauthorized" element={<UnAuthorized/>}/>
+                    <Route path="/view" element={<View />} />
                     <Route path="/" element={<Login />} />
-                    <Route path="/Student" element={<Student />} />
-                    <Route path="/Admin" element={<Admin />} />
-                    <Route path="/Teacher" element={<Teacher />} />
+                    <Route path="logout" element={<Logout/>}/>
+                    <Route element={<PrivateRoute allowedRoles={"Student"} />}>
+                        <Route path="/Student" element={<Student />} />
+                    </Route>
+                    <Route element={<PrivateRoute allowedRoles={"Admin"} />}>
+                        <Route path="/Admin" element={<Admin />} />
+                    </Route>
+                    <Route element={<PrivateRoute allowedRoles={"Teacher"} />}>
+                        <Route path="/Teacher" element={<Teacher />} />
+                    </Route>
+                    <Route path="*" element={<Navigate to="/" />} />
                 </Routes>
             </BrowserRouter>
-        </div>
+        </div >
     )
 }
 

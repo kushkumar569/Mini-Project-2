@@ -63,8 +63,13 @@ Login.post("/login", async (req, res) => {
 
 // **🔹 Persistent Login (Auto-Login)**
 const authenticateUser = (req, res, next) => {
-    const token = req.cookies.token;
+    console.log("Raw Cookies:", req.headers.cookie); // ✅ Log raw cookies for debugging
 
+    // ✅ Manually extract token from raw cookie string
+    const rawCookies = req.headers.cookie;
+    const token = rawCookies?.split("; ").find((c) => c.startsWith("token="))?.split("=")[1];
+
+    
     if (!token) {
         return res.status(401).json({ message: "Unauthorized, please login" });
     }
@@ -81,6 +86,8 @@ const authenticateUser = (req, res, next) => {
 
 // **🔹 Auto-Login Route**
 Login.get("/me", authenticateUser, (req, res) => {
+    console.log("hyyyyy");
+    
     res.json({
         message: `Welcome back, ${req.user.role}!`,
         user: req.user,

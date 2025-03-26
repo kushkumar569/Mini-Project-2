@@ -13,14 +13,11 @@ function App() {
 
   return (
     <>
-      {/* <SetRoutes>
-        <Login />
-      </SetRoutes> */}
       <RecoilRoot>
-        <Teacher />
-         {/* <Student/> */}
+        <SetRoutes>
+          <Login />
+        </SetRoutes>
       </RecoilRoot >
-      {/* <Test/> */}
     </>
   )
 }

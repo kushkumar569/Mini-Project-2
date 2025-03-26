@@ -10,3 +10,7 @@ export const live = atom({
     default: true
 })
 
+export const time = atom({
+    key: "Time",
+    default: ""
+})

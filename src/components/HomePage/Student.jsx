@@ -1,18 +1,90 @@
-import { useSetRecoilState, useRecoilValue } from "recoil";
+import { useSetRecoilState, useRecoilValue, useRecoilState } from "recoil";
 import { TeacherLatitude, TeacherLongitude } from "../atoms/location";
-import { live, Attend } from "../atoms/attendence";
+import { live, Attend, time as timeAtom } from "../atoms/attendence";
+import { courseCode, courseName, date, section } from "../atoms/detail";
 import Header from "../Header";
 import { useState, useEffect } from "react";
-
+import showToast from "./alert";
+import Logout from "../Login/Logout";
+import { time } from "motion";
+import { useNavigate } from "react-router-dom";
 
 function Student() {
+    const [view,setView] = useState(false);
+    const live2 = useRecoilValue(live);
+    console.log(live2);
+    
     return (
         <>
             <Header />
-            <Main />
+            {live2 ? <Timer setView={setView}/> : null}
+            {view ? <View/> :<Main />}
+            <Logout/>
         </>
     );
 }
+
+function Timer({setView}) {
+    const navigate = useNavigate();
+    const time = useRecoilValue(timeAtom); // Stored time in "hh:mm:ss" format
+    const [difference, setDifference] = useState(0);
+    const [timee, setTimee] = useState(20); // Default 5 min countdown
+
+    // Calculate absolute time difference
+    useEffect(() => {
+        if (!time) return;
+
+        function getAbsoluteTimeDifferenceInSeconds(t1, t2) {
+            const [h1, m1, s1] = t1.split(":").map(Number);
+            const [h2, m2, s2] = t2.split(":").map(Number);
+
+            const totalSeconds1 = h1 * 3600 + m1 * 60 + s1;
+            const totalSeconds2 = h2 * 3600 + m2 * 60 + s2;
+
+            return Math.abs(totalSeconds1 - totalSeconds2); // Absolute difference in seconds
+        }
+
+        const now = new Date();
+        const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
+
+        const diff = getAbsoluteTimeDifferenceInSeconds(currentTime, time);
+        setDifference(diff);
+        setTimee(20 - diff); // Start with (5 min - difference)
+    }, [time]);
+
+    // Countdown timer
+    useEffect(() => {
+        let timer;
+        if (timee > 0) {
+            timer = setInterval(() => {
+                setTimee(prevTime => {
+                    if (prevTime <= 1) {
+                        clearInterval(timer);
+                        navigate("/view")
+                        // setView(true)
+                        showToast("Time Over"); // Use alert if showToast is undefined
+                        return 0;
+                    }
+                    return prevTime - 1;
+                });
+            }, 1000);
+        }
+        return () => clearInterval(timer);
+    }, [timee]); // Restart effect if `timee` updates
+
+    function formatTime(seconds) {
+        const minutes = Math.floor(seconds / 60);
+        const secs = seconds % 60;
+        return `${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+    }
+
+    return (
+        <div className="text-lg font-bold text-gray-800">
+            Time Remaining: {formatTime(timee)}
+        </div>
+    );
+}
+
 
 function Main() {
     const setAttendence = useSetRecoilState(Attend);
@@ -127,7 +199,7 @@ function Main() {
                     </span>
                 </div>
                 <div className="mt-8 text-center">
-                    {underRange && live2 ? (!mark ? <Btn setMark={setMark} /> : <View mark={mark}/>) : (<Error msg={message} live2={live2} />)}
+                    {underRange && live2 ? (!mark ? <Btn setMark={setMark} /> : <View mark={mark} />) : (<Error msg={message} live2={live2} />)}
                 </div>
             </div>
         </div>
@@ -135,6 +207,12 @@ function Main() {
 }
 
 function Btn({ setMark }) {
+    const navigate = useNavigate();
+    const cc = useRecoilValue(courseCode);
+    const cn = useRecoilValue(courseName);
+    const dates = useRecoilValue(date);
+    const sec = useRecoilValue(section)
+
     const setAttendence = useSetRecoilState(Attend);
     const attend = useRecoilValue(Attend);
 
@@ -143,16 +221,25 @@ function Btn({ setMark }) {
         setAttendence(updatedNumbers);
         console.log("Updated Attendance:", updatedNumbers);
         setMark(true);
-        alert("Marked Attendance");
+        showToast("Marked Attendance")
+        navigate("/view")
     }
 
     return (
-        <button
-            className="bg-green-600 hover:bg-orange-400 active:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold mb-4 w-full mt-16"
-            onClick={mark}
-        >
-            Mark Attendance
-        </button>
+        <div>
+            <div className="font-bold">
+                <span>CouseCode:-{cc}</span><br />
+                <span>CouseName:-{cn}</span><br />
+                <span>date:-{dates}</span><br />
+                <span>section:-{sec}</span><br />
+            </div>
+            <button
+                className="bg-green-600 hover:bg-orange-400 active:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold mb-4 w-full mt-16"
+                onClick={mark}
+            >
+                Mark Attendance
+            </button>
+        </div>
     );
 }
 
@@ -165,10 +252,10 @@ function Error({ msg, live2 }) {
     );
 }
 
-function View({mark}) {
+function View({ mark }) {
     return (
         <>
-            {mark && <Success/>}
+            {mark && <Success />}
             <button className="bg-green-600 hover:bg-orange-400 active:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold mb-4 w-full mt-16">
                 View Attendance
             </button>
