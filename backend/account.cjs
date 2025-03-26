@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Enable CORS with specific origin
 app.use(cors({
-    origin: "https://mini-project-2-psi.vercel.app", // Allow multiple origins
+    origin: "https://mini-project-2-tau.vercel.app", // Allow multiple origins
     credentials: true // Allow cookies to be sent
 }));
 
