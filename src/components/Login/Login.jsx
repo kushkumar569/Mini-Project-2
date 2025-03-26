@@ -9,18 +9,28 @@ function Login() {
 
     // Auto-Login Check
     useEffect(() => {
-        fetch(`${process.env.BACKEND_URL}/me`, {
+        const token = localStorage.getItem("token");
+
+        fetch(`${import.meta.env.VITE_BACKEND_URL}/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
+            headers: {
+                "Authorization": `Bearer ${token}`, // Send token in the Authorization header
+                "Content-Type": "application/json",
+            }
         })
-            .then((res) => res.json())  
+            .then((res) => {
+                if (!res.ok) throw new Error("Failed to fetch user");
+                return res.json();
+            })
             .then((data) => {
                 if (data.user) {
                     navigate(`/${data.user.role.toLowerCase()}`);
                 }
             })
-            .then(console.log(process.env.BACKEND_URL))
             .catch((error) => console.error("Auto-login failed:", error));
+
+        // console.log(import.meta.env.VITE_BACKEND_URL); // Moved outside to avoid execution issues
     }, [navigate]);
 
     async function loginReq() {
@@ -41,6 +51,7 @@ function Login() {
             console.log("Login Response:", data.role,data.success);
             navigate(`/${data.role}`);
             if (data.success && data.role) {
+                localStorage.setItem("token",data.token)
                 navigate(`/${data.role}`);
             } else {
                 alert(data.message || "Invalid credentials, please try again.");
@@ -76,7 +87,7 @@ function Login() {
                     </div>
 
                     <div className="w-1/2 flex flex-col justify-center items-start px-12 text-black">
-                        <h2 className="text-3xl font-bold mb-6">Welcome Back again</h2>
+                        <h2 className="text-3xl font-bold mb-6">Welcome Back</h2>
                         <p className="text-gray-500 font-semibold mb-6">Please log in to continue</p>
 
                         <input

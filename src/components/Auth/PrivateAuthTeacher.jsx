@@ -6,11 +6,16 @@ function PrivateAuthTeacher({ allowedRoles }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
         fetch(`${import.meta.env.VITE_BACKEND_URL}/me`, {
             method: "GET",
-            credentials: "include",
+            credentials: "include", // Ensures cookies are sent
+            headers: {
+                "Authorization": `Bearer ${token}`, // Send token in the Authorization header
+                "Content-Type": "application/json",
+            }
         })
             .then((res) => res.json())
             .then((data) => {

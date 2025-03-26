@@ -53,9 +53,10 @@ Login.post("/login", async (req, res) => {
     // **5️⃣ Store Token in HTTP-only Cookie**
     return res.status(200).cookie("token", token, {
         httpOnly: true,
+        sameSite: "strict",
         secure: process.env.NODE_ENV === "production", // Secure in production
         maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days expiration
-    }).json({ success: true, role: userType });
+    }).json({ success: true, role: userType,token: token});
 });
 
 

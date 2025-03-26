@@ -19,12 +19,20 @@ function SetRoutes() {
                 <Route path="/view" element={<View />} />
                 <Route path="/" element={<Login />} />
                 <Route path="/logout" element={<Logout />} />
-                <Route path="/Admin" element={<Admin />} />
-                <Route path="/Teacher" element={<Teacher />} />
 
-                <Route path="/Student" element={<Student />} />
 
                 {/* Private Routes for different roles */}
+                <Route element={<PrivateAuthStudent allowedRoles="Student" />}>
+                    <Route path="/Student" element={<Student />} />
+                </Route>
+
+                <Route element={<PrivateAuthAdmin allowedRoles="Admin" />}>
+                    <Route path="/Admin" element={<Admin />} />
+                </Route>
+
+                <Route element={<PrivateAuthTeacher allowedRoles="Teacher" />}>
+                    <Route path="/Teacher" element={<Teacher />} />
+                </Route>
 
                 <Route path="*" element={<Navigate to="/" />} />
             </Routes>

@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import showToast from "../HomePage/alert";
 
 function Logout() {
     const navigate = useNavigate();
@@ -13,7 +14,8 @@ function Logout() {
             const data = await response.json();
 
             if (response.ok) {
-                alert(data.message || "Logged out successfully!");
+                showToast(data.message || "Logged out successfully!");
+                localStorage.removeItem("token");
                 navigate("/"); // Redirect to login page
             } else {
                 throw new Error(data.message || "Logout failed");
