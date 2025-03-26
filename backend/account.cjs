@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Enable CORS with specific origin
 app.use(cors({
-    origin: "https://gam0.netlify.app/", // Allow multiple origins
+    origin: "https://gam0.netlify.app", // Allow multiple origins
     credentials: true // Allow cookies to be sent
 }));
 
