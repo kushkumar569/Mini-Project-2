@@ -6,7 +6,7 @@ const { Teacher, Student, Admin } = require("../DataBase/Account.cjs");
 const { detail, Attendence } = require("../DataBase/Attendence.cjs");
 const { subject } = require("../DataBase/subject.cjs");
 const { Info, course, schedule } = require("../DataBase/TImeTable.cjs");
-const {Login} = require("../src/components/Login/index.cjs");
+const {Login} = require("./index.cjs");
 const {Class} = require("./class.cjs")
 
 const app = express();
@@ -14,7 +14,7 @@ app.use(express.json());
 
 // Enable CORS with specific origin
 app.use(cors({
-    origin: "http://localhost:5173", // Allow frontend to access backend
+    origin: `${process.env.FRONTEND_URL}`, // Allow frontend to access backend
     credentials: true // Allow cookies to be sent
 }));
 
