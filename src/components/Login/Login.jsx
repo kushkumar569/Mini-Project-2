@@ -13,7 +13,7 @@ function Login() {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
         })
-            .then((res) => res.json())
+            .then((res) => res.json())  
             .then((data) => {
                 if (data.user) {
                     navigate(`/${data.user.role.toLowerCase()}`);
@@ -38,10 +38,10 @@ function Login() {
                 throw new Error(data.message || "Login failed");
             }
 
-            console.log("Login Response:", data);
+            console.log("Login Response:", data.role);
 
             if (data.success && data.role) {
-                navigate(`/${data.role.toLowerCase()}`);
+                navigate(`/${data.role}`);
             } else {
                 alert(data.message || "Invalid credentials, please try again.");
             }
