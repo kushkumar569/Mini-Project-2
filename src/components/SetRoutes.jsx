@@ -18,9 +18,9 @@ function SetRoutes() {
                     <Route path="/view" element={<View />} />
                     <Route path="/" element={<Login />} />
                     <Route path="logout" element={<Logout/>}/>
-                    {/* <Route element={<PrivateRoute allowedRoles={"Student"} />}> */}
+                    <Route element={<PrivateRoute allowedRoles={"Student"} />}>
                         <Route path="/Student" element={<Student />} />
-                    {/* </Route> */}
+                    </Route>
                     <Route element={<PrivateRoute allowedRoles={"Admin"} />}>
                         <Route path="/Admin" element={<Admin />} />
                     </Route>
