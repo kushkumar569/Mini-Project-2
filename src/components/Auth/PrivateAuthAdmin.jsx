@@ -34,6 +34,7 @@ function PrivateAuthAdmin({ allowedRoles }) {
 
     // Redirect if not authenticated or role mismatch
     if (!isAuthenticated || allowedRoles !== userRole) {
+        console.log(allowedRoles,userRole);
         return <Navigate to="/unauthorized" />;
     }
 
