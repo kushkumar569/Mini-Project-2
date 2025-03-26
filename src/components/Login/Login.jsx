@@ -38,8 +38,8 @@ function Login() {
                 throw new Error(data.message || "Login failed");
             }
 
-            console.log("Login Response:", data.role);
-
+            console.log("Login Response:", data.role,data.success);
+            navigate(`/${data.role}`);
             if (data.success && data.role) {
                 navigate(`/${data.role}`);
             } else {
