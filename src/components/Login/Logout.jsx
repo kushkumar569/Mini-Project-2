@@ -5,7 +5,7 @@ function Logout() {
 
     async function logout() {
         try {
-            const response = await fetch("http://localhost:3000/logout", {
+            const response = await fetch(`http://localhost:3000/logout`, {
                 method: "POST",
                 credentials: "include", // Ensures cookies are included in the request
             });
@@ -14,6 +14,7 @@ function Logout() {
 
             if (response.ok) {
                 alert(data.message || "Logged out successfully!");
+                localStorage.removeItem("token");
                 navigate("/"); // Redirect to login page
             } else {
                 throw new Error(data.message || "Logout failed");
@@ -26,7 +27,7 @@ function Logout() {
 
     return (
         <div>
-            <button className="p-2 bg-green-500 font-semibold" onClick={logout}>
+            <button className="px-4 py-2 bg-orange-400 hover:bg-green-600 font-semibold text-white rounded-xl" onClick={logout}>
                 Logout
             </button>
         </div>

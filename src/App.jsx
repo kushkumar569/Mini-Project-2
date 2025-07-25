@@ -7,7 +7,11 @@ import SetRoutes from './components/SetRoutes'
 import Teacher from '../src/components/HomePage/Teacher'
 import Student from '../src/components/HomePage/Student'
 import { RecoilRoot } from "recoil";
-import Test from '../src/components/test/Test'
+// import Test from '../src/components/test/Test'
+import View from '../src/components/HomePage/View'
+import Admin from './components/Admin/Admin';
+import Test from './components/Admin/Test'
+
 function App() {
   const [count, setCount] = useState(0)
 
@@ -18,6 +22,7 @@ function App() {
           <Login />
         </SetRoutes>
       </RecoilRoot >
+          {/* <Admin/> */}
     </>
   )
 }

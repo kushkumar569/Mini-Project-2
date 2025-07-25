@@ -6,21 +6,35 @@ const { Teacher, Student, Admin } = require("../DataBase/Account.cjs");
 const { detail, Attendence } = require("../DataBase/Attendence.cjs");
 const { subject } = require("../DataBase/subject.cjs");
 const { Info, course, schedule } = require("../DataBase/TImeTable.cjs");
-const {Login} = require("../src/components/Login/index.cjs");
+const { ClassDetail,Live,Location } = require("../DataBase/ClassDetail.cjs")
+const {Login} = require("./login.cjs");
 const {Class} = require("./class.cjs")
+const {SetData} = require("./set.cjs");
+const {Get} = require("./getDetail.cjs")
+const {Add} = require("./AddAdmin.cjs")
+const {Delete} = require("./DeleteAdmin.cjs")
+const {Update} = require("./UpdateAdmin.cjs")
 
+require("dotenv").config();
 const app = express();
 app.use(express.json());
 
-// Enable CORS with specific origin
-app.use(cors({
-    origin: "http://localhost:5173", // Allow frontend to access backend
-    credentials: true // Allow cookies to be sent
-}));
-
+const corsOptions = {
+    origin: [
+      `${process.env.FRONTEND_URL}`,
+    ],
+    credentials: true
+  };
+  
+app.use(cors(corsOptions));
 
 app.use("/",Login);
 app.use("/class",Class);
+app.use("/setData",SetData);
+app.use("/get",Get)
+app.use("/Add",Add)
+app.use("/Delete",Delete)
+app.use("/Update",Update)
 
 async function main() {
     try {
@@ -39,6 +53,5 @@ async function main() {
         process.exit(1); // Exit process on failure
     }
 }
-
 
 main();

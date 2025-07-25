@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "type": "commonjs",
   "scripts": {
-    "start": "nodemon ./backend/account.cjs",
+    "start": "nodemon ./backend/index.cjs",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
@@ -19,6 +19,8 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^5.0.2",
     "mongodb": "^6.14.2",
     "mongoose": "^8.12.1",
     "motion": "^12.5.0",

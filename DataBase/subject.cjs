@@ -5,8 +5,8 @@ const ObjectId = mongoose.ObjectId;
 
 const subject = new Schema({
     email: {type: String},
-    courseCode: String,
-    couseName: String,
+    courseCode: {type: String,unique: true},
+    courseName: String,
     semester: { type: String, required: true },
     department: { type: String, required: true },
 })

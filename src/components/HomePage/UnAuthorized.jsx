@@ -5,7 +5,7 @@ function UnAuthorized(){
     const navigate = useNavigate();
     async function logout() {
         try {
-            const response = await fetch("http://localhost:3000/logout", {
+            const response = await fetch(`http://localhost:3000/logout`, {
                 method: "POST",
                 credentials: "include", // Ensures cookies are included in the request
             });
@@ -14,6 +14,7 @@ function UnAuthorized(){
 
             if (response.ok) {
                 // showToast(data.message || "Logged out successfully!");
+                localStorage.removeItem("token")
                 navigate("/"); // Redirect to login page
             } else {
                 throw new Error(data.message || "Logout failed");

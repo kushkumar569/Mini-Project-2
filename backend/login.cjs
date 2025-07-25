@@ -2,7 +2,7 @@ require("dotenv").config();
 const express = require("express");
 const {Router} = require("express");
 const Login = Router();
-const { Teacher, Student, Admin } = require("../../../DataBase/Account.cjs");
+const { Teacher, Student, Admin } = require("../DataBase/Account.cjs");
 const jwt = require("jsonwebtoken");
 const cookieParser = require("cookie-parser");
 
@@ -95,6 +95,40 @@ Login.get("/me", authenticateUser, (req, res) => {
 Login.post("/logout", (req, res) => {
     res.clearCookie("token");
     res.json({ message: "Logged out successfully!" });
+});
+
+Login.put("/ChangePassword", authenticateUser, async (req, res) => {
+    try {
+        const { Teacher, Student, Admin } = require("../DataBase/Account.cjs");
+
+        // Define model mapping inside the route
+        const models = { Teacher, Student, Admin };
+
+        const roleName = req.user.role;
+        const email = req.user.email;
+        const { oldPassword, newPassword } = req.body;
+
+        const roleModel = models[roleName];
+        if (!roleModel) {
+            return res.status(400).json({ message: "Invalid user role" });
+        }
+
+        const user = await roleModel.findOne({ email });
+        if (!user) return res.status(404).json({ message: "User not found" });
+
+        // Compare passwords (plaintext comparison — insecure, bcrypt recommended)
+        if (user.password !== oldPassword) {
+            return res.status(400).json({ message: "Old password is incorrect" });
+        }
+
+        user.password = newPassword;
+        await user.save();
+
+        return res.status(200).json({ message: "Password changed successfully" });
+    } catch (error) {
+        console.error("Password change error:", error);
+        return res.status(500).json({ message: "Internal server error" });
+    }
 });
 
 module.exports = {

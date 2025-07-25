@@ -11,7 +11,7 @@ const Info = new Schema({
 // Course Schema (Connected to Info)
 const course = new Schema({
     ids: { type: ObjectId, ref: "Info", required: true },  //  References Info._id
-    courseCode: { type: String, unique: true, required: true },  //  Unique Course Code
+    courseCode: { type: String, required: true },  //  Unique Course Code
     courseName: { type: String, required: true }
 });
 
@@ -24,7 +24,7 @@ const schedule = new Schema({
 });
 
 //  Compound Unique Index for Schedule (courseCode + section)
-schedule.index({ courseCode: 1, section: 1 }, { unique: true });
+// schedule.index({ courseCode: 1, section: 1 }, { unique: true });
 
 const InfoModel = mongoose.model('Info', Info);
 const CourseModel = mongoose.model('course', course);

@@ -1,16 +1,21 @@
 import { atom } from "recoil";
 
-export const Attend = atom({
-    key: "Attendence",
-    default: []
+export const Ids = atom({
+    key: "Ids",
+    default: null
 })
 
-export const live = atom({
-    key: "Live",
-    default: true
+export const Date = atom({
+    key: "Date",
+    default: null
 })
 
-export const time = atom({
+export const Time = atom({
     key: "Time",
-    default: ""
+    default: null
+})
+
+export const Day = atom({
+    key: "Day",
+    default: null
 })

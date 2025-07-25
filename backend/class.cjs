@@ -2,9 +2,6 @@ require("dotenv").config();
 const express = require("express");
 const { Router } = require("express");
 const Class = Router();
-const mongoose = require("mongoose");
-const { Teacher, Student, Admin } = require("../DataBase/Account.cjs");
-
 const { subject } = require("../DataBase/subject.cjs");
 const { course, schedule } = require("../DataBase/TImeTable.cjs");
 
@@ -32,14 +29,14 @@ Class.post("/data", async (req, res) => {
         return { day, time: hours, formattedDate, times};
     }
 
-    console.log("class");
 
     const { day, time, formattedDate,times} = getCurrentDateTime(); // ✅ Fixed variable names
     const { email } = req.body;
-
+    // console.log(email,"htyyyy");
+    
     try {
         const users = await subject.find({ email }); // Get user subjects
-        console.log(users);
+        // console.log(users,"gfsdafsgsd");
 
         let matchedClasses = [];
 
@@ -47,30 +44,31 @@ Class.post("/data", async (req, res) => {
             const matchedSchedule = await schedule.findOne({
                 courseCode: user.courseCode,
             });
+            console.log(matchedSchedule,"afgsdfda");
 
             if (matchedSchedule) {
-                console.log(matchedSchedule)
+                // console.log(matchedSchedule)
                 // Find the index where the day matches
                 const index = matchedSchedule.day.findIndex((d) => d === day);
-                console.log(index);
-                console.log(matchedSchedule.time[index]);
-                console.log((time));
-                console.log(matchedSchedule.time[index].startsWith(time));
-                                
-                
-                if (index !== -1 && matchedSchedule.time[index].startsWith(time)) {
+                // console.log(index,"index");
+                // console.log(matchedSchedule.time[index],"timee");
+                // console.log((time));
+                // console.log(matchedSchedule.time[index].startsWith(time),"true");
+                                               
+                if (index !== -1 && matchedSchedule.time[index] && matchedSchedule.time[index].startsWith(time)) {
                     matchedClasses.push({
                         ...user.toObject(),
                         section: matchedSchedule.section,
-                        day,
-                        formattedDate,
-                        times
+                        day:day,
+                        Date: formattedDate,
+                        time: times
                     });
+                    break;
                 }
             }
         }
 
-        console.log(matchedClasses);
+        // console.log(matchedClasses);
         res.status(200).json({ matchedClasses:matchedClasses });
     } catch (error) {
         console.error("Error fetching schedule:", error);
@@ -92,7 +90,6 @@ Class.post("/extra", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
-
 
 module.exports = {
     Class: Class

@@ -5,15 +5,21 @@ function PrivateRoute({ allowedRoles }) {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [userRole, setUserRole] = useState(null);
     const [loading, setLoading] = useState(true);
+    const token = localStorage.getItem("token");
 
     useEffect(() => {
-        fetch("http://localhost:3000/me", {
+        fetch(`http://localhost:3000/me`, {
             method: "GET",
-            credentials: "include", // Ensure cookies are sent
+            credentials: "include", // Ensures cookies are sent
+            headers: {
+                "Authorization": `Bearer ${token}`, // Send token in the Authorization header
+                "Content-Type": "application/json",
+            }
         })
             .then((res) => res.json())
             .then((data) => {
                 if (data.user) {
+                    console.log(data.user);
                     setIsAuthenticated(true);
                     setUserRole(data.user.role);
                 } else {
@@ -25,9 +31,11 @@ function PrivateRoute({ allowedRoles }) {
     }, []);
 
     if (loading) return <div>Loading...</div>;
-
+    
+    console.log(isAuthenticated, "Auth", allowedRoles,userRole);
+    
     // Redirect if not authenticated or role mismatch
-    if (!isAuthenticated || !allowedRoles.includes(userRole)) {
+    if (!isAuthenticated || allowedRoles!=userRole) {
         console.log(allowedRoles);
         return <Navigate to="/unauthorized" />;
     }

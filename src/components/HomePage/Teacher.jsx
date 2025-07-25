@@ -1,151 +1,246 @@
-import { useState, useEffect } from "react";
-import { useSetRecoilState, useRecoilValue, RecoilRoot } from "recoil";
-import { TeacherLatitude, TeacherLongitude } from "../atoms/location";
-import { account, courseCode, courseName, semester, department, section, date, day } from "../atoms/detail.js";
-import { live, Attend, time as timeAtom } from '../atoms/attendence';
+import { useState, useEffect, useRef } from "react";
 import Header from "../Header";
 import Main from "./Main.jsx"
 import showToast from "./alert.js";
 import Logout from "../Login/Logout.jsx";
 import { useNavigate } from "react-router-dom";
+import { useSetRecoilState } from "recoil";
+import { Ids, Date as DateAtom, Time as TimeAtom, Day } from "../atoms/attendence.js";
 
 function Teacher() {
-
     const navigate = useNavigate();
-
-    // Auto-Login Check
-    useEffect(() => {
-        fetch("http://localhost:3000/me", {
-            method: "GET",
-            credentials: "include", // Ensures cookies are sent
-        })
-            .then((res) => res.json())
-            .then((data) => {
-                if (data.user) {
-                    navigate(`/${data.user.role.toLowerCase()}`);
-                }
-            })
-            .catch((error) => console.error("Auto-login failed:", error));
-    }, [navigate]);
-
     const [isRunning, setIsRunning] = useState(false);
-    const [isClass, setIsClass] = useState(false);
     const [msg, setMsg] = useState("");
     const [showMain, setShowMain] = useState(false);
     const [selectedCourse, setSelectedCourse] = useState(null);
-    const [view,setView] = useState(false);
-    const email = useRecoilValue(account);
+    const [view, setView] = useState(false);
+    const [email, setEmail] = useState("");
+    const numbers = useRef([]);
+    const [extraClass, setExtraClass] = useState(false);
+    // console.log(typeof numbers);
 
     useEffect(() => {
         setView(false);
     }, []);
 
-    const setCC = useSetRecoilState(courseCode);
-    const setCN = useSetRecoilState(courseName);
-    const setSem = useSetRecoilState(semester);
-    const setDep = useSetRecoilState(department);
-    const setSec = useSetRecoilState(section);
-    const setDate = useSetRecoilState(date);
-    const setDay = useSetRecoilState(day);
-    const setTime = useSetRecoilState(timeAtom);
+    useEffect(() => {
+        const fetchEmail = async () => {
+            try {
+                const token = localStorage.getItem("token");
+                const response = await fetch(`http://localhost:3000/me`, {
+                    method: "GET",
+                    credentials: "include",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                    },
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch user");
+
+                const data = await response.json();
+                if (data.user) {
+                    console.log(data.user.email, "heloooo");
+                    setEmail(data.user.email);
+                }
+            } catch (error) {
+                console.error("Auto-login failed:", error);
+            }
+        };
+
+        fetchEmail();
+    }, []);
+
 
     useEffect(() => {
-        const fetchSchedule = async () => {
+        if (!email) return;
+        const fetchData = async () => {
             try {
-                const response = await fetch("http://localhost:3000/class/data", {
+                console.log(email, "Fetching class data...");
+
+                const response = await fetch(`http://localhost:3000/class/data`, {
                     method: "POST",
                     headers: {
-                        "Content-Type": "application/json"
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ email })
+                    body: JSON.stringify({ email }),
                 });
 
                 if (!response.ok) {
-                    setIsClass(false);
                     setShowMain(false);
                     return;
                 }
 
-
                 const data = await response.json();
-                const use = data.matchedClasses[0];
-                if (data.matchedClasses.length == 0) {
-                    console.log(data);
+
+                if (data.matchedClasses.length === 0) {
                     setMsg("There are no classes at this time");
-                    setIsClass(false);
                     setShowMain(false);
-                }
-                else {
-                    setIsClass(true);
+                } else {
+                    const use = data.matchedClasses[0];
+                    const set = async () => {
+                        try {
+                            const response = await fetch(`http://localhost:3000/setData/set`, {
+                                method: "PUT",
+                                headers: {
+                                    "Content-Type": "application/json",  // Fix: Add headers
+                                },
+                                body: JSON.stringify({
+                                    _id: "67e71048258dbe80e2a60117",
+                                    courseCode: use.courseCode,
+                                    courseName: use.courseName,
+                                    semester: use.semester,
+                                    department: use.department,
+                                    section: use.section,
+                                    day: use.day,
+                                    date: use.Date,
+                                    time: use.time
+                                })
+                            });
+                            console.log(response);
+
+                            if (!response.ok) {
+                                throw new Error("Failed to update user");
+                            }
+
+                            const data = await response.json();  // Fix: Call json() once
+                            console.log("Updated Class:", data);
+
+                        } catch (error) {
+                            console.error("Error:", error);
+                        }
+                    };
+
+
                     setShowMain(true);
                     setMsg("Class");
-                    console.log(use);
-
-                    setCC(use.courseCode);
-                    setCN(use.courseName);
-                    setSem(use.semester);
-                    setDep(use.department);
-                    setSec(use.section);
-                    setDate(use.formattedDate);
-                    setDay(use.day);
-                    setTime(use.time);
 
                     setSelectedCourse({
                         cc: use.courseCode,
                         cn: use.courseName,
                         sec: use.section,
-                        date: use.formattedDate,
+                        date: use.Date,
+                        dep: use.department,
+                        sem: use.semester,
+                        day: use.day,
+                        time: use.time
                     });
+                    await set();
+                    console.log("Class Data:", use);
                 }
-
             } catch (error) {
                 console.error("Error fetching schedule:", error);
                 setMsg("Error fetching schedule");
-                setIsClass(false);
                 setShowMain(false);
             }
         };
+        fetchData();
+    }, [email]); // Runs when `email` is set
 
-        fetchSchedule();
-    }, [email]);
+    function viewAttnd() {
+        navigate("/view")
+    }
+
+    function TodayClass() {
+        console.log(email);
+        navigate("/TodaySchedule", {
+            state: { email: email },
+        })
+    }
+
     return (
         <>
             <Header />
-            {isRunning && <Time isRunning={isRunning} setIsRunning={setIsRunning} setShowMain={setShowMain} setView={setView}/>}
-            
-            {view ? (
-                <View />
-            ) : showMain ? (
-                <RecoilRoot>
-                    <Main {...selectedCourse} isRunning={isRunning} setIsRunning={setIsRunning} />
-                </RecoilRoot>
-            ) : (
-                <NoClass msg={msg} setShowMain={setShowMain} setSelectedCourse={setSelectedCourse} />
+            {isRunning && (
+                <Time
+                    {...selectedCourse}
+                    isRunning={isRunning}
+                    setIsRunning={setIsRunning}
+                    setShowMain={setShowMain}
+                    setView={setView}
+                    numbers={numbers}
+                />
             )}
-            <Logout/>
+
+            <div className="flex justify-center mt-8 px-4">
+                <div className="w-full max-w-6xl bg-gray-200 rounded-2xl shadow-xl p-8 flex flex-col md:flex-row items-center justify-center gap-8">
+
+                    {showMain ? (
+                        <Main
+                            {...selectedCourse}
+                            isRunning={isRunning}
+                            setIsRunning={setIsRunning}
+                            numbers={numbers}
+                        />
+                    ) : (
+                        <div className="flex flex-col items-center text-center space-y-6 w-full">
+                            {!extraClass && <h2 className="text-xl font-semibold text-gray-800">
+                                No Classes At this Time
+                            </h2>}
+
+                            <div className="flex flex-wrap justify-center items-center gap-6">
+                                <NoClass
+                                    msg={msg}
+                                    setShowMain={setShowMain}
+                                    setExtraClass={setExtraClass}
+                                    setSelectedCourse={setSelectedCourse}
+                                    email={email}
+                                />
+
+                                {!extraClass && (
+                                    <button
+                                        className="bg-green-600 hover:bg-orange-400 active:bg-orange-500 text-white py-2 px-6 rounded-md font-semibold transition duration-300"
+                                        onClick={TodayClass}
+                                    >
+                                        Today’s Schedule
+                                    </button>
+                                )}
+
+                                {!extraClass && (
+                                    <button
+                                        className="bg-green-600 hover:bg-orange-400 active:bg-orange-500 text-white py-2 px-6 rounded-md font-semibold transition duration-300"
+                                        onClick={viewAttnd}
+                                    >
+                                        View Attendance
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+            </div>
+
+           {!extraClass && !showMain && <div className="mt-15 px-6 max-w-6xl mx-auto flex-col md:flex-row items-center justify-between gap-8 md:flex hidden">
+                {/* Left: Text Section */}
+                <div className="md:w-1/2 text-center md:text-left">
+                    <h1 className="text-4xl font-extrabold text-gray-800 mb-4">
+                        Geo-Fencing Attendance Manager
+                    </h1>
+                    <p className="text-md font-medium text-gray-700 leading-relaxed">
+                        Geo-Fencing Attendance Manager is a cutting-edge web-based solution that revolutionizes traditional attendance systems.
+                        It empowers institutions with a robust, transparent, and efficient way to manage attendance digitally by using location-aware technology.
+                    </p>
+                </div>
+
+                {/* Right: Image Section */}
+                <div className="md:w-1/2 flex justify-center">
+                    <img src="../../../public/logo.png" alt="Geo-Fencing Illustration" className="w-full max-w-sm rounded-lg" />
+                </div>
+            </div>}
+
         </>
+
     );
-    
-}
 
-function View(){
-    return(
-        <>
-            View Excel
-        </>
-    )
 }
 
 
-
-function NoClass({ msg,setShowMain,setSelectedCourse }) {
-    const email = useRecoilValue(account);
+function NoClass({ msg, setShowMain, setExtraClass, setSelectedCourse, email }) {
     const [find, setFind] = useState(false);
     const [classes, setClasses] = useState([]); // Store fetched classes
-
     async function FindClass() {
         try {
-            const response = await fetch("http://localhost:3000/class/extra", {
+            const response = await fetch(`http://localhost:3000/class/extra`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -154,63 +249,58 @@ function NoClass({ msg,setShowMain,setSelectedCourse }) {
             });
 
             if (!response.ok) {
-                console.error("Failed to fetch extra classes");
+                // console.error(response.json());
+                showToast(`Failed to fetch classes ${response.json()}`)
+                setExtraClass(false);
                 setFind(false);
                 return;
             }
 
             const data = await response.json();
-            console.log("Extra Classes:", data.Classes);
+            // showToast(`Extra Classes: ${data.Classes}`);
             setClasses(data.Classes); // Store classes in state
+            setExtraClass(true)
             setFind(true);
 
         } catch (error) {
+            setExtraClass(false)
             setFind(false);
+            showToast(`Failed to fetch classes ${error}`)
             console.error("Error fetching schedule:", error);
         }
     }
 
     return (
-        <div className="bg-white flex items-start justify-center">
-            <div className="w-full max-w-lg bg-gray-200 rounded-2xl shadow-lg flex flex-col p-6 items-center space-y-4">
-                { !find ? <span>{msg}</span> : null }
+        <div className="bg-gray-200 flex items-start justify-center">
+            {/* {!find ? <span>{msg}</span> : null} */}
 
-                { !find ? (
-                    <button 
-                        className="bg-green-600 hover:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold w-full" 
-                        onClick={FindClass}
-                    >
-                        Extra Class/Reschedule
-                    </button>
-                ) : (
-                    <div className="flex flex-row flex-wrap gap-4 justify-center">
-                        {classes.map((course, index) => (
-                            <Extra key={index} course={course} setShowMain={setShowMain} setSelectedCourse={setSelectedCourse} />
-                        ))}
-                    </div>
-                )}
-            </div>
+            {!find ? (
+                <button
+                    className="bg-green-600 hover:bg-orange-400 text-white py-2 px-6 rounded-md font-semibold w-full"
+                    onClick={FindClass}
+                >
+                    Extra Class/Reschedule
+                </button>
+
+            ) : (
+                <div className="flex flex-row flex-wrap gap-4 justify-center">
+                    {classes.map((course, index) => (
+                        <Extra key={index} course={course} setShowMain={setShowMain} setSelectedCourse={setSelectedCourse} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
 
 function Extra({ course, setShowMain, setSelectedCourse }) {
-    const [sect, setSect] = useState("A"); // Default section
+    const [sect, setSect] = useState("A"); // Default section (Hard coded)
 
-    const setCC = useSetRecoilState(courseCode);
-    const setCN = useSetRecoilState(courseName);
-    const setSem = useSetRecoilState(semester);
-    const setDep = useSetRecoilState(department);
-    const setSec = useSetRecoilState(section);
-    const setDate = useSetRecoilState(date);
-    const setDay = useSetRecoilState(day);
-    const setTime = useSetRecoilState(timeAtom);
+    let days = null
+    let time = null
+    let formattedDate = null
 
-    let days=null
-    let time=null
-    let formattedDate=null
-
-    function find(){
+    async function find() {
         const now = new Date();
 
         const dayss = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -227,20 +317,49 @@ function Extra({ course, setShowMain, setSelectedCourse }) {
         const year = now.getFullYear();
         formattedDate = `${date}/${month}/${year}`;
 
-        setCC(course.courseCode);
-        setCN(course.courseName);
-        setSem(course.semester);
-        setDep(course.department);
-        setSec(sect);
-        setDate(formattedDate);
-        setDay(days);
-        setTime(time);
+        const set = async () => {
+            try {
+                const response = await fetch(`http://localhost:3000/setData/set`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",  // Fix: Add headers
+                    },
+                    body: JSON.stringify({
+                        _id: "67e71048258dbe80e2a60117",
+                        courseCode: course.courseCode,
+                        courseName: course.courseName,
+                        semester: course.semester,
+                        department: course.department,
+                        section: sect,
+                        day: days,
+                        date: formattedDate,
+                        time: time
+                    })
+                });
+                console.log(response);
+
+                if (!response.ok) {
+                    throw new Error("Failed to update user");
+                }
+
+                const data = await response.json();  // Fix: Call json() once
+                console.log("Updated Class:", data);
+
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        };
+        await set();
 
         setSelectedCourse({
             cc: course.courseCode,
             cn: course.courseName,
             sec: sect,
             date: formattedDate,
+            dep: course.department,
+            sem: course.semester,
+            day: days,
+            time: time
         });
 
         setShowMain(true);
@@ -271,58 +390,141 @@ function Extra({ course, setShowMain, setSelectedCourse }) {
     );
 }
 
-function Time({ isRunning, setIsRunning, setShowMain,setView }) {
+function Time({ cc, cn, sec, date, dep, sem, day, time, isRunning, setIsRunning, setShowMain, setView, numbers }) {
     const navigate = useNavigate();
-    const now = new Date();
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    const times = `${hours}:${minutes}:${seconds}`;
-
     const [timee, setTimee] = useState(1 * 30);
-    const t = useRecoilValue(timeAtom);
-    const setLiveAttendance = useSetRecoilState(live);
-    const setLat = useSetRecoilState(TeacherLatitude);
-    const setLon = useSetRecoilState(TeacherLongitude);
+    const [hasRun, setHasRun] = useState(false);
+    const setids = useSetRecoilState(Ids);
+    const setdate = useSetRecoilState(DateAtom);
+    const settime = useSetRecoilState(TimeAtom);
+    const setday = useSetRecoilState(Day);
 
-    const setCC = useSetRecoilState(courseCode);
-    const setCN = useSetRecoilState(courseName);
-    const setSem = useSetRecoilState(semester);
-    const setDep = useSetRecoilState(department);
-    const setSec = useSetRecoilState(section);
-    const setDate = useSetRecoilState(date);
-    const setDay = useSetRecoilState(day);
-    const setTime = useSetRecoilState(timeAtom);
+    const set = async () => {
+        try {
+            const response = await fetch(`http://localhost:3000/setData/set`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",  // Fix: Add headers
+                },
+                body: JSON.stringify({
+                    _id: "67e71048258dbe80e2a60117",
+                    courseCode: null,
+                    courseName: null,
+                    semester: null,
+                    department: null,
+                    section: null,
+                    day: null,
+                    date: null,
+                    time: null
+                })
+            });
+            console.log(response);
 
-    useEffect(() => {
-        // console.log(t); 
-    }, [t])
+            if (!response.ok) {
+                throw new Error("Failed to update user");
+            }
+
+            const data = await response.json();  // Fix: Call json() once
+            console.log("Updated Class:", data);
+
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    };
+
+    async function setTime() {
+        try {
+            const response = await fetch(`http://localhost:3000/setData/setTime`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    _id: "67e71052258dbe80e2a60119",
+                    TeacherLatitude: 0,
+                    TeacherLongitude: 0,
+                    isLive: false,
+                    time: null
+                })
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Updated Time:", data);
+            } else {
+                const errorText = await response.text();
+                console.error("Error Response:", errorText);
+                throw new Error(`Failed to update Time: ${errorText}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
+
+    async function setAttendence() {
+        try {
+            const response = await fetch(`http://localhost:3000/setData/setAttendence`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    courseCode: cc,
+                    courseName: cn,
+                    section: sec,
+                    Date: date,
+                    department: dep,
+                    semester: sem,
+                    Day: day,
+                    Time: time,
+                    atted: numbers.current
+                })
+            });
+
+            console.log(response);
+
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Updated Time:", data);
+                setids(cc);
+                settime(time);
+                setdate(date);
+                setday(day);
+            } else {
+                const errorText = await response.text();
+                console.error("Error Response:", errorText);
+                throw new Error(`Failed to update Time: ${errorText}`);
+            }
+        } catch (error) {
+            console.error("Error:", error);
+        }
+    }
 
     useEffect(() => {
         let timer;
+        if (hasRun) return;
+        setHasRun(true);
+
+        const handleTimeout = async () => {
+            await setAttendence(); // Call attendance update
+            await set(); // Call your set function
+            await setTime(); // Call setTime
+            await new Promise(resolve => setTimeout(resolve, 5000)); // Wait for 5 seconds
+
+            setIsRunning(false);
+            setShowMain(false);
+            setView(true);
+            navigate('/TodayAttendence', { replace: true });
+        };
+
         if (isRunning && timee > 0) {
-            setTime(times);
             timer = setInterval(() => {
                 setTimee(prevTime => {
                     if (prevTime <= 1) {
                         clearInterval(timer);
-                        setLiveAttendance(false);
-                        setLat(0.0);
-                        setLon(0.0);
-                        setIsRunning(false);
-                        setShowMain(false);
-                        setView(true);
-
-                        setCC("");
-                        setCN("");
-                        setSem("");
-                        setDep("");
-                        setSec("");
-                        setDate("");
-                        setDay("");
-                        setTime("");
-                        showToast("Time Over")
-                        navigate('/view')
+                        handleTimeout();
                         return 0;
                     }
                     return prevTime - 1;
@@ -330,7 +532,7 @@ function Time({ isRunning, setIsRunning, setShowMain,setView }) {
             }, 1000);
         }
         return () => clearInterval(timer);
-    }, [isRunning, setLiveAttendance, setIsRunning, setLat, setLon]);
+    }, []);
 
     function formatTime(seconds) {
         const minutes = Math.floor(seconds / 60);
