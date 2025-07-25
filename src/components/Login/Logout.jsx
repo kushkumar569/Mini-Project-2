@@ -5,7 +5,7 @@ function Logout() {
 
     async function logout() {
         try {
-            const response = await fetch(`http://localhost:3000/logout`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/logout`, {
                 method: "POST",
                 credentials: "include", // Ensures cookies are included in the request
             });

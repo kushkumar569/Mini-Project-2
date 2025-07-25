@@ -19,7 +19,7 @@ function SetSchedule() {
     useEffect(() => {
         const fetchCourseCode = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/Get/getCourseCode`);
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getCourseCode`);
                 if (response.ok) {
                     const data = await response.json();
                     console.log(data);
@@ -64,7 +64,7 @@ function SetSchedule() {
 
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
-            const response = await fetch(`http://localhost:3000/Add/AddSchedule`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Add/AddSchedule`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -27,7 +27,7 @@ function TodayAttendance() {
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/get/TodayAttendence`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/TodayAttendence`, {
                     method: "POST",
                     credentials: "include",
                     headers: {

@@ -11,7 +11,7 @@ function DeleteLocation() {
 
     const fetchLocations = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/Get/getLocation`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getLocation`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -33,7 +33,7 @@ function DeleteLocation() {
     const handleDelete = async (vanue, id) => {
         setSelectedVanue(vanue);
         try {
-            const response = await fetch(`http://localhost:3000/Delete/DeleteLocation`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Delete/DeleteLocation`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

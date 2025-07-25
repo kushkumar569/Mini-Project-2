@@ -13,7 +13,7 @@ function AddClasses() {
     useEffect(() => {
         const fetchTeachers = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/Get/getTeacher`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getTeacher`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ function AddClasses() {
         }
         else {
             try {
-                const response = await fetch(`http://localhost:3000/Add/AddClass`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Add/AddClass`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",

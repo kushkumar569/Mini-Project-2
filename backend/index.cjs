@@ -22,6 +22,7 @@ app.use(express.json());
 const corsOptions = {
     origin: [
       `${process.env.FRONTEND_URL}`,
+      "https://geofencing-attendance-manager.vercel.app"
     ],
     credentials: true
   };

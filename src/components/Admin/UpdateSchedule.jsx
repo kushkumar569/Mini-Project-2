@@ -22,7 +22,7 @@ function UpdateSchedule() {
 
     const fetchAllSchedules = async () => {
         try {
-            const res = await fetch(`http://localhost:3000/Get/getSchedule`);
+            const res = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getSchedule`);
             if (res.ok) {
                 const data = await res.json();
                 // console.log(data);
@@ -77,7 +77,7 @@ function UpdateSchedule() {
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/Update/updateSchedule`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Update/updateSchedule`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",

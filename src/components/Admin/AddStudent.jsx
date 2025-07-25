@@ -38,7 +38,7 @@ function AddStudent() {
             ShowToast("Enter password")
         }else{
             try {
-                const response = await fetch(`http://localhost:3000/Add/AddStudent`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Add/AddStudent`, {
                     method: "POST", // Use POST for creating new entries
                     headers: {
                         "Content-Type": "application/json",

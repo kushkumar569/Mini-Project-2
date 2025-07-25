@@ -10,7 +10,7 @@ function TodaySchedule() {
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/get/TodaySchedule`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/TodaySchedule`, {
                     method: "POST",
                     credentials: "include",
                     headers: {

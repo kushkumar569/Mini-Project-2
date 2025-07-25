@@ -34,7 +34,7 @@ function View() {
     useEffect(() => {
         const fetchClasses = async () => {
             try {
-                const response = await fetch(`http://localhost:3000/get/AllClassDetail`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/AllClassDetail`, {
                     method: "GET",
                     credentials: "include",
                     headers: {
@@ -69,7 +69,7 @@ function View() {
 
         setSelectedClass(classId);
         try {
-            const response = await fetch(`http://localhost:3000/get/GetAttendence`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/GetAttendence`, {
                 method: "POST",
                 credentials: "include",
                 headers: {

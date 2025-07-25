@@ -12,7 +12,7 @@ function DeleteTeacher() {
 
     const fetchTeacher = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/Get/getTeacher`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getTeacher`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function DeleteTeacher() {
     const handleDelete = async (email) => {
         setSelectedTeacher(email);
         try {
-            const response = await fetch(`http://localhost:3000/Delete/DeleteTeacher`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Delete/DeleteTeacher`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",
@@ -59,7 +59,7 @@ function DeleteTeacher() {
     
     const deleteClass = async (email) => {
         try {
-            const response = await fetch(`http://localhost:3000/Delete/DeleteTeacherClass`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Delete/DeleteTeacherClass`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

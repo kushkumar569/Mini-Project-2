@@ -11,7 +11,7 @@ function DeleteSchedule() {
 
     const fetchSchedules = async () => {
         try {
-            const response = await fetch(`http://localhost:3000/Get/getSchedule`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getSchedule`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -34,7 +34,7 @@ function DeleteSchedule() {
     const deleteSchedule = async (scheduleId) => {
         setSelectedSchedule(scheduleId);
         try {
-            const response = await fetch(`http://localhost:3000/Delete/DeleteSchedule`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Delete/DeleteSchedule`, {
                 method: "DELETE",
                 headers: {
                     "Content-Type": "application/json",

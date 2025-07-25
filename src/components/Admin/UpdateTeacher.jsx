@@ -14,7 +14,7 @@ function UpdateTeacher() {
 
   const fetchTeachers = async () => {
     try {
-      const response = await fetch(`http://localhost:3000/Get/getTeacher`, {
+      const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Get/getTeacher`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
@@ -51,7 +51,7 @@ function UpdateTeacher() {
     }
 
     try {
-      const response = await fetch(`http://localhost:3000/Update/updateTeacher`, {
+      const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Update/updateTeacher`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

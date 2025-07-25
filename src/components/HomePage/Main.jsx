@@ -35,7 +35,7 @@ function Main({ cc, cn, sec, date, dep, sem, day, time, isRunning, setIsRunning,
     useEffect(() => {
         async function vanue() {
             try {
-                const response = await fetch(`http://localhost:3000/get/getLocation`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/getLocation`, {
                     method: "GET",
                     headers: {
                         "Content-Type": "application/json",
@@ -65,7 +65,7 @@ function Main({ cc, cn, sec, date, dep, sem, day, time, isRunning, setIsRunning,
         const times = now.toTimeString().split(" ")[0]; // HH:MM:SS
 
         try {
-            const response = await fetch(`http://localhost:3000/setData/setTime`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/setData/setTime`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -121,7 +121,7 @@ function Main({ cc, cn, sec, date, dep, sem, day, time, isRunning, setIsRunning,
         }
 
         try {
-            const response = await fetch(`http://localhost:3000/get/getVanue`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/getVanue`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

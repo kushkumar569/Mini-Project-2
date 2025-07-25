@@ -32,7 +32,7 @@ function UpdateStudent() {
             showToast("Enter section")
         }else{
             try {
-                const response = await fetch(`http://localhost:3000/Update/UpdateStudent`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/Update/UpdateStudent`, {
                     method: "POST", // Use POST for creating new entries
                     headers: {
                         "Content-Type": "application/json",

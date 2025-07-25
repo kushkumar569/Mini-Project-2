@@ -12,7 +12,7 @@ function Login() {
         const token = localStorage.getItem("token");
         console.log(token);
 
-        fetch(`http://localhost:3000/me`, {
+        fetch(`https://mini-project-2-6a2p.onrender.com/me`, {
             method: "GET",
             credentials: "include", // Ensures cookies are sent
             headers: {
@@ -36,7 +36,7 @@ function Login() {
 
     async function loginReq() {
         try {
-            const response = await fetch(`http://localhost:3000/login`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/login`, {
                 method: "POST",
                 credentials: "include", // Ensures cookies are stored
                 headers: { "Content-Type": "application/json" },

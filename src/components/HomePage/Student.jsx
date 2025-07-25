@@ -21,7 +21,7 @@ function Student() {
             try {
                 // Fetch user data
                 const token = localStorage.getItem("token");
-                const userResponse = await fetch(`http://localhost:3000/me`, {
+                const userResponse = await fetch(`https://mini-project-2-6a2p.onrender.com/me`, {
                     method: "GET",
                     credentials: "include",
                     headers: {
@@ -38,7 +38,7 @@ function Student() {
                 }
 
                 // Fetch status data
-                const statusResponse = await fetch(`http://localhost:3000/get/status`, {
+                const statusResponse = await fetch(`https://mini-project-2-6a2p.onrender.com/get/status`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -60,7 +60,7 @@ function Student() {
 
                 console.log(statusInfo.data.isLive, statusInfo.data.TeacherLatitude, statusInfo.data.TeacherLongitude, statusInfo.data.time);
 
-                const response = await fetch(`http://localhost:3000/get/class`, {
+                const response = await fetch(`https://mini-project-2-6a2p.onrender.com/get/class`, {
                     method: "POST",
                     credentials: "include",
                     headers: {
@@ -149,7 +149,7 @@ function Timer({ time, live, email, classes, mark, setMark }) {
 
     async function setAttendence() {
         try {
-            const response = await fetch(`http://localhost:3000/setData/setStudentAttendence`, {
+            const response = await fetch(`https://mini-project-2-6a2p.onrender.com/setData/setStudentAttendence`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
