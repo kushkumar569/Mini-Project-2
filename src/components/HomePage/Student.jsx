@@ -200,6 +200,9 @@ function Timer({ time, live, email, classes, mark, setMark }) {
                             if (mark == true) {
                                 console.log("must be true:-", mark);                             
                                 await setAttendence();
+                            }else{
+                                showToast("Attendance not marked.Time Over");
+                                window.location.reload();
                             }
                         })();
                         return 0;
