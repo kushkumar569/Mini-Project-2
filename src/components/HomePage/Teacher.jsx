@@ -224,7 +224,7 @@ function Teacher() {
 
                 {/* Right: Image Section */}
                 <div className="md:w-1/2 flex justify-center">
-                    <img src="../../../public/logo.png" alt="Geo-Fencing Illustration" className="w-full max-w-sm rounded-lg" />
+                    <img src="https://res.cloudinary.com/dpcdpjm8a/image/upload/v1753893202/processed_logo-removebg-preview__1_-removebg-preview_yyupw5.png" alt="Geo-Fencing Illustration" className="w-full max-w-sm rounded-lg" />
                 </div>
             </div>}
 
