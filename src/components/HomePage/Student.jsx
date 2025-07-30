@@ -276,7 +276,7 @@ function Main({ latTeacher, lonTeacher, live, email, classes, setView, mark, set
                 const dis = await vincenty(latTeacher, lonTeacher, latNow, lonNow);
                 setDistance(dis);
 
-                if (dis <= 1000) {
+                if (dis <= 20) {
                     setUnderRange(true);
                     setMessage("Inside Range - Present");
                 } else {
