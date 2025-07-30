@@ -10,7 +10,8 @@ app.use(express.json());
 
 Class.post("/data", async (req, res) => {
     function getCurrentDateTime() {
-        const now = new Date();
+        const nowIST = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+        const now = new Date(nowIST); // Convert the IST string back to a Date object
 
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
         const day = days[now.getDay()]; // Current day (Sunday, Monday, etc.)
@@ -26,14 +27,15 @@ Class.post("/data", async (req, res) => {
         const year = now.getFullYear();
         const formattedDate = `${date}/${month}/${year}`;
 
-        return { day, time: hours, formattedDate, times};
+        return { day, time: hours, formattedDate, times };
     }
 
 
-    const { day, time, formattedDate,times} = getCurrentDateTime(); // ✅ Fixed variable names
+
+    const { day, time, formattedDate, times } = getCurrentDateTime(); // ✅ Fixed variable names
     const { email } = req.body;
     // console.log(email,"htyyyy");
-    
+
     try {
         const users = await subject.find({ email }); // Get user subjects
         // console.log(users,"gfsdafsgsd");
@@ -44,7 +46,7 @@ Class.post("/data", async (req, res) => {
             const matchedSchedule = await schedule.findOne({
                 courseCode: user.courseCode,
             });
-            console.log(matchedSchedule,"afgsdfda");
+            console.log(matchedSchedule, "afgsdfda");
 
             if (matchedSchedule) {
                 // console.log(matchedSchedule)
@@ -54,12 +56,12 @@ Class.post("/data", async (req, res) => {
                 // console.log(matchedSchedule.time[index],"timee");
                 // console.log((time));
                 // console.log(matchedSchedule.time[index].startsWith(time),"true");
-                                               
+
                 if (index !== -1 && matchedSchedule.time[index] && matchedSchedule.time[index].startsWith(time)) {
                     matchedClasses.push({
                         ...user.toObject(),
                         section: matchedSchedule.section,
-                        day:day,
+                        day: day,
                         Date: formattedDate,
                         time: times
                     });
@@ -69,7 +71,7 @@ Class.post("/data", async (req, res) => {
         }
 
         // console.log(matchedClasses);
-        res.status(200).json({ matchedClasses:matchedClasses });
+        res.status(200).json({ matchedClasses: matchedClasses });
     } catch (error) {
         console.error("Error fetching schedule:", error);
         res.status(500).json({ error: "Internal server error" });
