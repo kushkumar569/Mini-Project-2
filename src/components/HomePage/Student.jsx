@@ -138,7 +138,7 @@ function Timer({ time, live, email, classes, mark, setMark }) {
         const now = new Date();
         const currentTime = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`;
 
-        const diff = getAbsoluteTimeDifferenceInSeconds(currentTime, time);
+        const diff = getAbsoluteTimeDifferenceInSeconds(currentTime, time)+2;
         setDifference(diff);
         setTimee(32 - diff); // Start with (5 min - difference)
     }, [time]);
@@ -190,7 +190,7 @@ function Timer({ time, live, email, classes, mark, setMark }) {
             timer = setInterval(() => {
                 setTimee(prevTime => {
                     if (prevTime <= 1) {
-                        new Promise(resolve => setTimeout(resolve, 2000));
+                        // new Promise(resolve => setTimeout(resolve, 2000));
                         clearInterval(timer);
                         (async () => {
                             await new Promise(resolve => setTimeout(resolve, 2000)); // Delay for 2 seconds
@@ -419,9 +419,9 @@ function Btn({ setMark, email, classes, setView, lat, lon, distance }) {
     console.log(lat, lon, distance);
 
     async function marks() {
-        showToast(`Mark Attendance Successful ${email}`);
         setMark(true);
         setView(true)
+        showToast(`Mark Attendance Successful ${email}`);
     }
 
     return (
